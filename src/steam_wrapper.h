@@ -2,6 +2,8 @@
 #define STEAM_WRAPPER_H
 
 //Stuff.
-void SomeClass_doSomething();
+bool SteamAPI_Init();
+
+void SteamAPI_Shutdown();
 
 #endif
