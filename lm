@@ -1,0 +1,16 @@
+#!/bin/sh
+# lm - CMake shortcut command for linux
+
+SOURCE_DIR=$(printf "%q" "$PWD") # escapes the dir with backslashes
+
+export STEAMWORKS_ROOT="dependencies/steamworks"
+
+mkdir -p build/debug
+
+cd build/debug
+
+#cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$SOURCE_DIR -DSTEAMWORKS_ROOT=$STEAMWORKS_ROOT -G "Unix Makefiles" ../..
+cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$SOURCE_DIR -G "Unix Makefiles" ../..
+
+make
+make install
