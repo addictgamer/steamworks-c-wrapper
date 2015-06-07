@@ -99,3 +99,8 @@ extern "C" EBeginAuthSessionResult SteamGameServer_BeginAuthSession(const void *
 {
 	return static_cast<EBeginAuthSessionResult>(steam::SteamGameServer()->BeginAuthSession(pAuthTicket, cbAuthTicket, *static_cast<steam::CSteamID* >(steamID)));
 }
+
+extern "C" void SteamGameServer_EndAuthSession(void* steamID)
+{
+	steam::SteamGameServer()->EndAuthSession(*static_cast<steam::CSteamID* >(steamID));
+}

@@ -93,5 +93,9 @@ enum EBeginAuthSessionResult
  */
 EBeginAuthSessionResult SteamGameServer_BeginAuthSession(const void *pAuthTicket, int cbAuthTicket, void* steamID);
 
+/*
+ * NOTE: steamID should be a pointer to a CSteamID. It gets converted back to a CSteamID in this function.
+ */
+void SteamGameServer_EndAuthSession(void* steamID);
 
 #endif
