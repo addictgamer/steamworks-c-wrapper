@@ -2,7 +2,8 @@ This library wraps around Valve's Steam API (Steamworks) to allow C programs to 
 
 Basic instructions:
 
-==LINUX==
+LINUX
+-----
  * Get the Steamworks SDK. You should know how to do this.
  * Install the SDK in a system search path or otherwise set an environment variable pointing to it (e.g. export STEAMWORKS_ROOT="dependencies/steamworks")
 The FindSTEAMWORKS.cmake module is pretty bad right now...You'll have to edit it manually for your system. I know, I don't like it either, but that's the current state of affairs.
@@ -11,7 +12,8 @@ The FindSTEAMWORKS.cmake module is pretty bad right now...You'll have to edit it
  * Run make install
 The library and headers will be be in lib/ and include/
 
-==Windows==
+Windows
+-------
 I'm not quite sure as to the exact steps to compile this on Windows as I don't have a Windows development environment, but, roughly:
  * Get the Steamworks SDK.
  * Do something such that CMake sees an environment variable telling it where you downloaded the SDK. If you're running a shell that supports SH scripts, then you can do export STEAMWORKS_ROOT="whatever/the/path/is"
