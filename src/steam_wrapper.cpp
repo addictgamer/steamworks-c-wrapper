@@ -87,3 +87,13 @@ extern "C" void SteamGameServer_EnableHeartbeats(bool bActive)
 {
 	steam::SteamGameServer()->EnableHeartbeats(bActive);
 }
+
+extern "C" void SteamGameServer_LogOff()
+{
+	steam::SteamGameServer()->LogOff();
+}
+
+extern "C" void SteamGameServerNetworking_AcceptP2PSessionWithUser(void* steamIDRemote)
+{
+	steam::SteamGameServerNetworking()->AcceptP2PSessionWithUser(*static_cast<steam::CSteamID* >(steamIDRemote));
+}

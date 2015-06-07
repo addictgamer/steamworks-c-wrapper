@@ -41,6 +41,9 @@ void SteamGameServer_Shutdown();
  */
 void* SteamGameServer();
 
+/*
+ * Would it be better to create a struct with function pointers to all of these functions?
+ */
 void SteamGameServer_SetModDir(const char *pszModDir);
 
 void SteamGameServer_SetProduct(const char *pszProduct);
@@ -50,6 +53,10 @@ void SteamGameServer_SetGameDescription(const char *pszGameDescription);
 void SteamGameServer_LogOnAnonymous();
 
 void SteamGameServer_EnableHeartbeats(bool bActive);
+
+void SteamGameServer_LogOff();
+
+void SteamGameServerNetworking_AcceptP2PSessionWithUser(void* steamIDRemote);
 
 
 #endif
