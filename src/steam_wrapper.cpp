@@ -109,3 +109,8 @@ extern "C" bool SteamGameServerNetworking_IsP2PPacketAvailable(uint32_t *pcubMsg
 {
 	return steam::SteamGameServerNetworking()->IsP2PPacketAvailable(pcubMsgSize, nChannel);
 }
+
+extern "C" bool SteamGameServerNetworking_ReadP2PPacket(void *pubDest, uint32_t cubDest, uint32_t *pcubMsgSize, void* psteamIDRemote, int nChannel)
+{
+	return steam::SteamGameServerNetworking()->ReadP2PPacket(pubDest, cubDest, pcubMsgSize, static_cast<steam::CSteamID* >(psteamIDRemote), nChannel);
+}

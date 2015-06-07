@@ -103,4 +103,10 @@ void SteamGameServer_EndAuthSession(void* steamID);
  */
 bool SteamGameServerNetworking_IsP2PPacketAvailable(uint32_t *pcubMsgSize, int nChannel);
 
+/*
+ * NOTE: psteamIDRemote should be a CSteamID pointer. It gets converted back to a CSteamID pointer in this function.
+ * NOTE 2: nChannel defaults to zero in the steam API. That is not so here because, you know, C.
+ */
+bool SteamGameServerNetworking_ReadP2PPacket(void *pubDest, uint32_t cubDest, uint32_t *pcubMsgSize, void* psteamIDRemote, int nChannel);
+
 #endif
