@@ -62,3 +62,28 @@ extern "C" void* SteamGameServer()
 {
 	return steam::SteamGameServer();
 }
+
+extern "C" void SteamGameServer_SetModDir(const char *pszModDir)
+{
+	steam::SteamGameServer()->SetModDir(pszModDir);
+}
+
+extern "C" void SteamGameServer_SetProduct(const char *pszProduct)
+{
+	steam::SteamGameServer()->SetProduct(pszProduct);
+}
+
+extern "C" void SteamGameServer_SetGameDescription(const char *pszGameDescription)
+{
+	steam::SteamGameServer()->SetGameDescription(pszGameDescription);
+}
+
+extern "C" void SteamGameServer_LogOnAnonymous()
+{
+	steam::SteamGameServer()->LogOnAnonymous();
+}
+
+extern "C" void SteamGameServer_EnableHeartbeats(bool bActive)
+{
+	steam::SteamGameServer()->EnableHeartbeats(bActive);
+}

@@ -41,4 +41,15 @@ void SteamGameServer_Shutdown();
  */
 void* SteamGameServer();
 
+void SteamGameServer_SetModDir(const char *pszModDir);
+
+void SteamGameServer_SetProduct(const char *pszProduct);
+
+void SteamGameServer_SetGameDescription(const char *pszGameDescription);
+
+void SteamGameServer_LogOnAnonymous();
+
+void SteamGameServer_EnableHeartbeats(bool bActive);
+
+
 #endif
