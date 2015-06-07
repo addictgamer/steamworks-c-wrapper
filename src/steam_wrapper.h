@@ -74,7 +74,7 @@ enum EP2PSend
 /*
  * NOTE: nChannel defaults to zero in the steam API. That does not happen here.
  * Because, you know, C.
- * NOTE 2: steamIDRemote should be a pointer to a CSteamID. In the steam API, that's what it is. It gets converted back to a CSteamID in this function.
+ * NOTE 2: steamIDRemote should be a pointer to a CSteamID. It gets converted back to a CSteamID in this function.
  */
 bool SteamGameServerNetworking_SendP2PPacket(void* steamIDRemote, const void *pubData, uint32_t cubData, EP2PSend eP2PSendType, int nChannel);
 
@@ -112,5 +112,10 @@ bool SteamGameServerNetworking_ReadP2PPacket(void *pubDest, uint32_t cubDest, ui
 uint64_t SteamGameServer_GetSteamID_ConvertToUInt64();
 
 bool SteamGameServer_BSecure();
+
+/*
+ * NOTE: steamIDUser should be a pointer to a CSteamID. It gets converted back to a CSteamID in this function.
+ */
+void SteamGameServer_SendUserDisconnect(void* steamIDUser);
 
 #endif

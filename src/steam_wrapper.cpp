@@ -124,3 +124,8 @@ extern "C" bool SteamGameServer_BSecure()
 {
 	return steam::SteamGameServer()->BSecure();
 }
+
+extern "C" void SteamGameServer_SendUserDisconnect(void* steamIDUser)
+{
+	steam::SteamGameServer()->SendUserDisconnect(*static_cast<steam::CSteamID *>(steamIDUser));
+}
