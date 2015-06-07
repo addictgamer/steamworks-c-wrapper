@@ -27,10 +27,17 @@ if (NOT STEAMWORKS_INCLUDE_DIR OR NOT STEAMWORKS_LIBRARIES)
 		DOC "Include path for Steamworks"
 	)
 
-	FIND_LIBRARY(STEAMWORKS_LIBRARY NAMES steam_api
-		PATHS ${LIB_SEARCH_PATHS}
-		DOC "Steamworks library name"
-	)
+	if (Windows)
+		FIND_LIBRARY(STEAMWORKS_LIBRARY NAMES steam_api64
+			PATHS ${LIB_SEARCH_PATHS}
+			DOC "Steamworks library name"
+		)
+	else ()
+		FIND_LIBRARY(STEAMWORKS_LIBRARY NAMES steam_api
+			PATHS ${LIB_SEARCH_PATHS}
+			DOC "Steamworks library name"
+		)
+	endif ()
 	if (STEAMWORKS_LIBRARY)
 		set(STEAMWORKS_LIBRARIES ${STEAMWORKS_LIBRARY})
 	endif ()
