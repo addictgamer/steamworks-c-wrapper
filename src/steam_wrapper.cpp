@@ -3,15 +3,15 @@
  * See LICENSE for details.
  */
 
+extern "C"
+{
+	#include "steam_wrapper.h"
+}
+
 namespace steam
 {
 	#include <steam/steam_api.h>
 	#include <steam/steam_gameserver.h>
-}
-
-extern "C"
-{
-	#include "steam_wrapper.h"
 }
 
 extern "C" bool SteamAPI_Init()

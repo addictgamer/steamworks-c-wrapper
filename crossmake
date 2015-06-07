@@ -1,0 +1,16 @@
+#!/bin/sh
+# crossmake - CMake shortcut command for linux crosscompiling for Windows with i686-w64-mingw on Arch Linux.
+# Process will vary from system to system, this file provided as an example.
+
+SOURCE_DIR=$(printf "%q" "$PWD") # escapes the dir with backslashes
+
+export STEAMWORKS_ROOT="/usr/i686-w64-mingw32" #contains the "sdk" folder from inside 
+
+mkdir -p build-crosscompile/debug
+
+cd build-crosscompile/debug
+
+cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$ -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_C_COMPILER=i686-w64-mingw32-gcc -DCMAKE_CXX_COMPILER=i686-w64-mingw32-g++ -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY -DCMAKE_FIND_ROOT_PATH=/usr/i686-w64-mingw32 -G "Unix Makefiles" ../..
+
+make
+make install
