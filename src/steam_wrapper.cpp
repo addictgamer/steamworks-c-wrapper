@@ -8,7 +8,7 @@ extern "C"
 	#include "steam_wrapper.h"
 }
 
-namespace steam
+namespace steam //Bad idea. I need an alternative.
 {
 	#include <steam/steam_api.h>
 	#include <steam/steam_gameserver.h>
