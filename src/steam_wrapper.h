@@ -118,4 +118,16 @@ bool SteamGameServer_BSecure();
  */
 void SteamGameServer_SendUserDisconnect(void* steamIDUser);
 
+void SteamGameServer_RunCallbacks();
+
+void SteamGameServer_SetMaxPlayerCount(int cPlayersMax);
+
+void SteamGameServer_SetPasswordProtected(bool bPasswordProtected);
+
+void SteamGameServer_SetServerName(const char *pszServerName);
+
+void SteamGameServer_SetBotPlayerCount(int cBotplayers);
+
+void SteamGameServer_SetMapName(const char *pszMapName);
+
 #endif

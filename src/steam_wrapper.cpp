@@ -129,3 +129,33 @@ extern "C" void SteamGameServer_SendUserDisconnect(void* steamIDUser)
 {
 	steam::SteamGameServer()->SendUserDisconnect(*static_cast<steam::CSteamID *>(steamIDUser));
 }
+
+extern "C" void SteamGameServer_RunCallbacks()
+{
+	steam::SteamGameServer_RunCallbacks();
+}
+
+extern "C" void SteamGameServer_SetMaxPlayerCount(int cPlayersMax)
+{
+	steam::SteamGameServer()->SetMaxPlayerCount(cPlayersMax);
+}
+
+extern "C" void SteamGameServer_SetPasswordProtected(bool bPasswordProtected)
+{
+	steam::SteamGameServer()->SetPasswordProtected(bPasswordProtected);
+}
+
+extern "C" void SteamGameServer_SetServerName(const char *pszServerName)
+{
+	steam::SteamGameServer()->SetServerName(pszServerName);
+}
+
+extern "C" void SteamGameServer_SetBotPlayerCount(int cBotplayers)
+{
+	steam::SteamGameServer()->SetBotPlayerCount(cBotplayers);
+}
+
+extern "C" void SteamGameServer_SetMapName(const char *pszMapName)
+{
+	steam::SteamGameServer()->SetMapName(pszMapName);
+}
