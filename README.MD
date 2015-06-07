@@ -24,7 +24,7 @@ Windows users, please let me know how you do it.
  * make install
 
 
-General note:
+General noteS:
 -------------
 STEAMWORKS_SDK should point to the directory containing the "sdk" folder in the zip download. For example:
 /home/ciprian/programming/c/steamapi-c-wrapper/dependencies/steamworks/sdk/redistributable_bin/linux32/
@@ -34,3 +34,9 @@ Whereas, you will set STEAMWORKS_SDK to:
 
 Q: "So when I export the steamworks sdk location as an environment variable do I want to export the location with the Readme.txt and the client, glmgr, public, redistributable_bin, etc. folders? Or the one above it?"
 A: The one above it. It should just have a folder named "sdk"
+
+
+
+
+Also, you need to define bool before you include the wrapper's header. Otherwise, a C compiler will slap you with a fish.
+This could probably be changed so it just uses an int which it converts to a bool in the C++ code, but I'll leave it like this for the moment.
