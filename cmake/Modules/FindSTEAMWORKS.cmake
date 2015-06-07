@@ -16,6 +16,7 @@ if (NOT STEAMWORKS_INCLUDE_DIR OR NOT STEAMWORKS_LIBRARIES)
 		$ENV{STEAMWORKSROOT}/sdk/redistributable_bin/linux64 #I don't like this. TODO: Make it determine 64/32 bit automatically.
 		$ENV{STEAMWORKS_ROOT}/sdk/redistributable_bin/linux64
 		$ENV{STEAMWORKS_DIR}/sdk/redistributable_bin/linux64
+		$ENV{STEAMWORKS_ROOT}/sdk/redistributable_bin/win64
 	)
 	FIND_PATH(STEAMWORKS_INCLUDE_DIR steam/steam_api.h
 		/usr/include
