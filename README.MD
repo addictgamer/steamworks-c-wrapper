@@ -25,6 +25,7 @@ Windows users, please let me know how you do it.
 
 
 General note:
+-------------
 STEAMWORKS_SDK should point to the folder containing the "sdk" folder in the zip download. For example:
 /home/ciprian/programming/c/steamapi-c-wrapper/dependencies/steamworks/sdk/redistributable_bin/linux32/
 Is the full path to the location of the .so cmake will link against.
