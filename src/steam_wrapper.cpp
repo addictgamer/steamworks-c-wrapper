@@ -57,3 +57,8 @@ extern "C" void SteamGameServer_Shutdown()
 {
 	steam::SteamGameServer_Shutdown();
 }
+
+extern "C" void* SteamGameServer()
+{
+	return steam::SteamGameServer();
+}

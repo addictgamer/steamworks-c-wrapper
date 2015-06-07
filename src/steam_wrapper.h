@@ -32,4 +32,13 @@ bool SteamGameServer_Init(uint32_t unIP, uint16_t usSteamPort, uint16_t usGamePo
 
 void SteamGameServer_Shutdown();
 
+/*
+ * Note: The Steam API prototype looks like this: S_API ISteamGameServer* SteamGameServer().
+ * This returns a void pointer to the return value of that function.
+ * At this point in time, there isn't really much value in the return data except to check if it's NULL or something else,
+ * seeing as the data being pointed to is a class.
+ * What the intended purpose of the return data is, I don't know.
+ */
+void* SteamGameServer();
+
 #endif
