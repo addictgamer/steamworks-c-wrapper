@@ -40,17 +40,9 @@ extern "C" bool SteamUser_BLoggedOn()
 	return steam::SteamUser()->BLoggedOn();
 }
 
-//Helper function to SteamGameServer_Init.
-steam::EServerMode convertToSteamEServerMode(EServerMode input)
-{
-	steam::EServerMode result;
-	result = static_cast<steam::EServerMode>(input);
-	return result;
-}
-
 extern "C" bool SteamGameServer_Init(uint32_t unIP, uint16_t usSteamPort, uint16_t usGamePort, uint16_t usQueryPort, EServerMode eServerMode, const char* pchVersionString)
 {
-	return steam::SteamGameServer_Init(unIP, usSteamPort, usGamePort, usQueryPort, convertToSteamEServerMode(eServerMode), pchVersionString);
+	return steam::SteamGameServer_Init(unIP, usSteamPort, usGamePort, usQueryPort, static_cast<steam::EServerMode>(eServerMode), pchVersionString);
 }
 
 extern "C" void SteamGameServer_Shutdown()
@@ -96,4 +88,9 @@ extern "C" void SteamGameServer_LogOff()
 extern "C" void SteamGameServerNetworking_AcceptP2PSessionWithUser(void* steamIDRemote)
 {
 	steam::SteamGameServerNetworking()->AcceptP2PSessionWithUser(*static_cast<steam::CSteamID* >(steamIDRemote));
+}
+
+extern "C" bool SteamGameServerNetworking_SendP2PPacket(void* steamIDRemote, const void *pubData, uint32_t cubData, EP2PSend eP2PSendType, int nChannel)
+{
+	steam::SteamGameServerNetworking()->SendP2PPacket(*static_cast<steam::CSteamID* >(steamIDRemote), pubData, cubData, static_cast<steam::EP2PSend>(eP2PSendType), nChannel);
 }

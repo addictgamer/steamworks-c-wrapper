@@ -56,7 +56,27 @@ void SteamGameServer_EnableHeartbeats(bool bActive);
 
 void SteamGameServer_LogOff();
 
+/*
+ * Note that the original function takes a CSteamID.
+ * steamIDRemote should be a pointer to a CSteamID. It gets converted back to a CSteamID in this function.
+ * I sure hope this void pointer is sufficient for dealing with CSteamID.
+ */
 void SteamGameServerNetworking_AcceptP2PSessionWithUser(void* steamIDRemote);
+
+enum EP2PSend
+{
+	k_EP2PSendUnreliable = 0,
+	k_EP2PSendUnreliableNoDelay = 1,
+	k_EP2PSendReliable = 2,
+	k_EP2PSendReliableWithBuffering = 3,
+};
+
+/*
+ * NOTE: nChannel defaults to zero in the steam API. That does not happen here.
+ * Because, you know, C.
+ * NOTE 2: steamIDRemote should be a pointer to a CSteamID. In the steam API, that's what it is. It gets converted back to a CSteamID in this function.
+ */
+bool SteamGameServerNetworking_SendP2PPacket(void* steamIDRemote, const void *pubData, uint32_t cubData, EP2PSend eP2PSendType, int nChannel);
 
 
 #endif
