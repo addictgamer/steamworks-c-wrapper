@@ -2,7 +2,7 @@ This library wraps around Valve's Steam API (Steamworks) to allow C programs to 
 
 Basic instructions:
 
-LINUX
+Linux
 -----
  * Get the Steamworks SDK. You should know how to do this.
  * Install the SDK in a system search path or otherwise set an environment variable pointing to it (e.g. export STEAMWORKS_ROOT="dependencies/steamworks")
@@ -24,7 +24,7 @@ Windows users, please let me know how you do it.
  * make install
 
 
-General noteS:
+General notes:
 -------------
 STEAMWORKS_SDK should point to the directory containing the "sdk" folder in the zip download. For example:
 /home/ciprian/programming/c/steamapi-c-wrapper/dependencies/steamworks/sdk/redistributable_bin/linux32/
