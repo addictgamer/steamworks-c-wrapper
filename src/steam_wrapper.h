@@ -20,13 +20,13 @@ bool SteamAPI_RestartAppIfNecessary(uint32_t unOwnAppID);
 
 bool SteamUser_BLoggedOn();
 
-enum EServerMode
+typedef enum EServerMode_t
 {
 	eServerModeInvalid = 0,
 	eServerModeNoAuthentication = 1,
 	eServerModeAuthentication = 2,
 	eServerModeAuthenticationAndSecure = 3,
-};
+} EServerMode;
 
 bool SteamGameServer_Init(uint32_t unIP, uint16_t usSteamPort, uint16_t usGamePort, uint16_t usQueryPort, EServerMode eServerMode, const char* pchVersionString);
 
@@ -63,13 +63,13 @@ void SteamGameServer_LogOff();
  */
 void SteamGameServerNetworking_AcceptP2PSessionWithUser(void* steamIDRemote);
 
-enum EP2PSend
+typedef enum EP2PSend_t
 {
 	k_EP2PSendUnreliable = 0,
 	k_EP2PSendUnreliableNoDelay = 1,
 	k_EP2PSendReliable = 2,
 	k_EP2PSendReliableWithBuffering = 3,
-};
+} EP2PSend;
 
 /*
  * NOTE: nChannel defaults to zero in the steam API. That does not happen here.
@@ -78,7 +78,7 @@ enum EP2PSend
  */
 bool SteamGameServerNetworking_SendP2PPacket(void* steamIDRemote, const void *pubData, uint32_t cubData, EP2PSend eP2PSendType, int nChannel);
 
-enum EBeginAuthSessionResult
+typedef enum EBeginAuthSessionResult_t
 {
 	k_EBeginAuthSessionResultOK = 0,
 	k_EBeginAuthSessionResultInvalidTicket = 1,
@@ -86,7 +86,7 @@ enum EBeginAuthSessionResult
 	k_EBeginAuthSessionResultInvalidVersion = 3,
 	k_EBeginAuthSessionResultGameMismatch = 4,
 	k_EBeginAuthSessionResultExpiredTicket = 5,
-};
+} EBeginAuthSessionResult;
 
 /*
  * NOTE: steamID should be a pointer to a CSteamID. It gets converted back to a CSteamID in this function.
