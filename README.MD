@@ -31,3 +31,6 @@ STEAMWORKS_SDK should point to the directory containing the "sdk" folder in the 
 Is the full path to the location of the .so cmake will link against.
 Whereas, you will set STEAMWORKS_SDK to:
 /home/ciprian/programming/c/steamapi-c-wrapper/dependencies/steamworks
+
+Q: "So when I export the steamworks sdk location as an environment variable do I want to export the location with the Readme.txt and the client, glmgr, public, redistributable_bin, etc. folders? Or the one above it?"
+A: The one above it. It should just have a folder named "sdk"
