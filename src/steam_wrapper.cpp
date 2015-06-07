@@ -119,3 +119,8 @@ extern "C" uint64_t SteamGameServer_GetSteamID_ConvertToUInt64()
 {
 	return steam::SteamGameServer()->GetSteamID().ConvertToUint64();
 }
+
+extern "C" bool SteamGameServer_BSecure()
+{
+	return steam::SteamGameServer()->BSecure();
+}

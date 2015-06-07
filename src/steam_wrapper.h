@@ -111,4 +111,6 @@ bool SteamGameServerNetworking_ReadP2PPacket(void *pubDest, uint32_t cubDest, ui
 
 uint64_t SteamGameServer_GetSteamID_ConvertToUInt64();
 
+bool SteamGameServer_BSecure();
+
 #endif
