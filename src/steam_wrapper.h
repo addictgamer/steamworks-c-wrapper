@@ -130,4 +130,6 @@ void SteamGameServer_SetBotPlayerCount(int cBotplayers);
 
 void SteamGameServer_SetMapName(const char *pszMapName);
 
+bool SteamGameServer_BUpdateUserData(void* steamIDUser, const char *pchPlayerName, uint32_t uScore);
+
 #endif

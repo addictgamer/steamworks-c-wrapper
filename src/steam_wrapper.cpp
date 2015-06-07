@@ -159,3 +159,8 @@ extern "C" void SteamGameServer_SetMapName(const char *pszMapName)
 {
 	steam::SteamGameServer()->SetMapName(pszMapName);
 }
+
+extern "C" bool SteamGameServer_BUpdateUserData(void* steamIDUser, const char *pchPlayerName, uint32_t uScore)
+{
+	steam::SteamGameServer()->BUpdateUserData(*static_cast<steam::CSteamID* >(steamIDUser), pchPlayerName, uScore);
+}
