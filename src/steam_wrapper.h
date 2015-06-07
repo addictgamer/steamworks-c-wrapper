@@ -109,4 +109,6 @@ bool SteamGameServerNetworking_IsP2PPacketAvailable(uint32_t *pcubMsgSize, int n
  */
 bool SteamGameServerNetworking_ReadP2PPacket(void *pubDest, uint32_t cubDest, uint32_t *pcubMsgSize, void* psteamIDRemote, int nChannel);
 
+uint64_t SteamGameServer_GetSteamID_ConvertToUInt64();
+
 #endif

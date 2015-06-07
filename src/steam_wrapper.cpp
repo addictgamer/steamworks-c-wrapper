@@ -114,3 +114,8 @@ extern "C" bool SteamGameServerNetworking_ReadP2PPacket(void *pubDest, uint32_t 
 {
 	return steam::SteamGameServerNetworking()->ReadP2PPacket(pubDest, cubDest, pcubMsgSize, static_cast<steam::CSteamID* >(psteamIDRemote), nChannel);
 }
+
+extern "C" uint64_t SteamGameServer_GetSteamID_ConvertToUInt64()
+{
+	return steam::SteamGameServer()->GetSteamID().ConvertToUint64();
+}
