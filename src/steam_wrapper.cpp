@@ -104,3 +104,8 @@ extern "C" void SteamGameServer_EndAuthSession(void* steamID)
 {
 	steam::SteamGameServer()->EndAuthSession(*static_cast<steam::CSteamID* >(steamID));
 }
+
+extern "C" bool SteamGameServerNetworking_IsP2PPacketAvailable(uint32_t *pcubMsgSize, int nChannel)
+{
+	return steam::SteamGameServerNetworking()->IsP2PPacketAvailable(pcubMsgSize, nChannel);
+}

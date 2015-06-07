@@ -98,4 +98,9 @@ EBeginAuthSessionResult SteamGameServer_BeginAuthSession(const void *pAuthTicket
  */
 void SteamGameServer_EndAuthSession(void* steamID);
 
+/*
+ * NOTE: nChannel defaults to zero in the steam API. That is not so here because, you know, C.
+ */
+bool SteamGameServerNetworking_IsP2PPacketAvailable(uint32_t *pcubMsgSize, int nChannel);
+
 #endif
