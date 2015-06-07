@@ -94,3 +94,8 @@ extern "C" bool SteamGameServerNetworking_SendP2PPacket(void* steamIDRemote, con
 {
 	steam::SteamGameServerNetworking()->SendP2PPacket(*static_cast<steam::CSteamID* >(steamIDRemote), pubData, cubData, static_cast<steam::EP2PSend>(eP2PSendType), nChannel);
 }
+
+extern "C" EBeginAuthSessionResult SteamGameServer_BeginAuthSession(const void *pAuthTicket, int cbAuthTicket, void* steamID)
+{
+	return static_cast<EBeginAuthSessionResult>(steam::SteamGameServer()->BeginAuthSession(pAuthTicket, cbAuthTicket, *static_cast<steam::CSteamID* >(steamID)));
+}

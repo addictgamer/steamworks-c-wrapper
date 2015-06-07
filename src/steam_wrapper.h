@@ -78,5 +78,20 @@ enum EP2PSend
  */
 bool SteamGameServerNetworking_SendP2PPacket(void* steamIDRemote, const void *pubData, uint32_t cubData, EP2PSend eP2PSendType, int nChannel);
 
+enum EBeginAuthSessionResult
+{
+	k_EBeginAuthSessionResultOK = 0,
+	k_EBeginAuthSessionResultInvalidTicket = 1,
+	k_EBeginAuthSessionResultDuplicateRequest = 2,
+	k_EBeginAuthSessionResultInvalidVersion = 3,
+	k_EBeginAuthSessionResultGameMismatch = 4,
+	k_EBeginAuthSessionResultExpiredTicket = 5,
+};
+
+/*
+ * NOTE: steamID should be a pointer to a CSteamID. It gets converted back to a CSteamID in this function.
+ */
+EBeginAuthSessionResult SteamGameServer_BeginAuthSession(const void *pAuthTicket, int cbAuthTicket, void* steamID);
+
 
 #endif
