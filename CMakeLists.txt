@@ -28,7 +28,13 @@ include_directories(${STEAMWORKS_INCLUDE_DIR})
 add_subdirectory(src)
 
 add_library(steamworks_cwrapper ${LIBRARY_SOURCES})
-target_compile_features(steamworks_cwrapper PRIVATE cxx_range_for)
+if (Windows)
+	#Because CMake in Windows acts like a drugged hippie that plays with fire potatos instead of compiling code. Ugh.
+	find_package(CXX11 REQUIRED)
+else ()
+	#Seriously. Why isn't this working under Windows? Twice has a user reported it don't work.
+	target_compile_features(steamworks_cwrapper PRIVATE cxx_range_for)
+endif ()
 
 target_link_libraries(steamworks_cwrapper ${STEAMWORKS_LIBRARY})
 
