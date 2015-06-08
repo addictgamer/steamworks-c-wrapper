@@ -7,6 +7,12 @@ endif ()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
+if (BIT_32)
+	MESSAGE("COMPILING 32 BIT")
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -m32")
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_DEBUG} -m32")
+endif()
+
 set (Windows 0)
 if (NOT WIN32)
 	#set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -pg -ffast-math -funroll-loops -fstrict-aliasing")

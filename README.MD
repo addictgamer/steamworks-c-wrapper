@@ -23,6 +23,12 @@ Windows users, please let me know how you do it.
  * make
  * make install
 
+Using this library
+------------------
+ * Include steam_wrapper.h (should be #include <steamworks_cwrapper/steam_wrapper.h>)
+ * Take a look at steam_wrapper.h. Note two things: Everything's prepended with c_. So you'd call c_SteamAPI_Init() instead of SteamAPI_Init().
+    Second thing to note is that a class's member function is called by c_SomeClass_DoSomething(), instead of SomeClass::DoSomething().
+
 
 General notes:
 -------------
