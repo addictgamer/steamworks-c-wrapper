@@ -8,159 +8,156 @@ extern "C"
 	#include "steam_wrapper.h"
 }
 
-namespace steam //Bad idea. I need an alternative.
+#include <steam/steam_api.h>
+#include <steam/steam_gameserver.h>
+
+extern "C" bool c_SteamAPI_Init()
 {
-	#include <steam/steam_api.h>
-	#include <steam/steam_gameserver.h>
+	return SteamAPI_Init();
 }
 
-extern "C" bool SteamAPI_Init()
+extern "C" void c_SteamAPI_Shutdown()
 {
-	return steam::SteamAPI_Init();
+	SteamAPI_Shutdown();
 }
 
-extern "C" void SteamAPI_Shutdown()
+extern "C" bool c_SteamAPI_RestartAppIfNecessary(uint32_t unOwnAppID)
 {
-	steam::SteamAPI_Shutdown();
-}
-
-extern "C" bool SteamAPI_RestartAppIfNecessary(uint32_t unOwnAppID)
-{
-	return steam::SteamAPI_RestartAppIfNecessary(unOwnAppID);
+	return SteamAPI_RestartAppIfNecessary(unOwnAppID);
 }
 
 //What is this? Where is it defined? How do I wrap it? AAAAAAAAAAAAH.
 /*bool Steamworks_InitCEGLibrary()
 {
-	return steam::Steamworks_InitCEGLibrary();
+	return Steamworks_InitCEGLibrary();
 }*/
 
-extern "C" bool SteamUser_BLoggedOn()
+extern "C" bool c_SteamUser_BLoggedOn()
 {
-	return steam::SteamUser()->BLoggedOn();
+	return SteamUser()->BLoggedOn();
 }
 
-extern "C" bool SteamGameServer_Init(uint32_t unIP, uint16_t usSteamPort, uint16_t usGamePort, uint16_t usQueryPort, EServerMode eServerMode, const char* pchVersionString)
+extern "C" bool c_SteamGameServer_Init(uint32_t unIP, uint16_t usSteamPort, uint16_t usGamePort, uint16_t usQueryPort, c_EServerMode eServerMode, const char* pchVersionString)
 {
-	return steam::SteamGameServer_Init(unIP, usSteamPort, usGamePort, usQueryPort, static_cast<steam::EServerMode>(eServerMode), pchVersionString);
+	return SteamGameServer_Init(unIP, usSteamPort, usGamePort, usQueryPort, static_cast<EServerMode>(eServerMode), pchVersionString);
 }
 
-extern "C" void SteamGameServer_Shutdown()
+extern "C" void c_SteamGameServer_Shutdown()
 {
-	steam::SteamGameServer_Shutdown();
+	SteamGameServer_Shutdown();
 }
 
-extern "C" void* SteamGameServer()
+extern "C" void* c_SteamGameServer()
 {
-	return steam::SteamGameServer();
+	return SteamGameServer();
 }
 
-extern "C" void SteamGameServer_SetModDir(const char *pszModDir)
+extern "C" void c_SteamGameServer_SetModDir(const char *pszModDir)
 {
-	steam::SteamGameServer()->SetModDir(pszModDir);
+	SteamGameServer()->SetModDir(pszModDir);
 }
 
-extern "C" void SteamGameServer_SetProduct(const char *pszProduct)
+extern "C" void c_SteamGameServer_SetProduct(const char *pszProduct)
 {
-	steam::SteamGameServer()->SetProduct(pszProduct);
+	SteamGameServer()->SetProduct(pszProduct);
 }
 
-extern "C" void SteamGameServer_SetGameDescription(const char *pszGameDescription)
+extern "C" void c_SteamGameServer_SetGameDescription(const char *pszGameDescription)
 {
-	steam::SteamGameServer()->SetGameDescription(pszGameDescription);
+	SteamGameServer()->SetGameDescription(pszGameDescription);
 }
 
-extern "C" void SteamGameServer_LogOnAnonymous()
+extern "C" void c_SteamGameServer_LogOnAnonymous()
 {
-	steam::SteamGameServer()->LogOnAnonymous();
+	SteamGameServer()->LogOnAnonymous();
 }
 
-extern "C" void SteamGameServer_EnableHeartbeats(bool bActive)
+extern "C" void c_SteamGameServer_EnableHeartbeats(bool bActive)
 {
-	steam::SteamGameServer()->EnableHeartbeats(bActive);
+	SteamGameServer()->EnableHeartbeats(bActive);
 }
 
-extern "C" void SteamGameServer_LogOff()
+extern "C" void c_SteamGameServer_LogOff()
 {
-	steam::SteamGameServer()->LogOff();
+	SteamGameServer()->LogOff();
 }
 
-extern "C" void SteamGameServerNetworking_AcceptP2PSessionWithUser(void* steamIDRemote)
+extern "C" void c_teamGameServerNetworking_AcceptP2PSessionWithUser(void* steamIDRemote)
 {
-	steam::SteamGameServerNetworking()->AcceptP2PSessionWithUser(*static_cast<steam::CSteamID* >(steamIDRemote));
+	SteamGameServerNetworking()->AcceptP2PSessionWithUser(*static_cast<CSteamID* >(steamIDRemote));
 }
 
-extern "C" bool SteamGameServerNetworking_SendP2PPacket(void* steamIDRemote, const void *pubData, uint32_t cubData, EP2PSend eP2PSendType, int nChannel)
+extern "C" bool c_SteamGameServerNetworking_SendP2PPacket(void* steamIDRemote, const void *pubData, uint32_t cubData, c_EP2PSend eP2PSendType, int nChannel)
 {
-	steam::SteamGameServerNetworking()->SendP2PPacket(*static_cast<steam::CSteamID* >(steamIDRemote), pubData, cubData, static_cast<steam::EP2PSend>(eP2PSendType), nChannel);
+	SteamGameServerNetworking()->SendP2PPacket(*static_cast<CSteamID* >(steamIDRemote), pubData, cubData, static_cast<EP2PSend>(eP2PSendType), nChannel);
 }
 
-extern "C" EBeginAuthSessionResult SteamGameServer_BeginAuthSession(const void *pAuthTicket, int cbAuthTicket, void* steamID)
+extern "C" c_EBeginAuthSessionResult c_SteamGameServer_BeginAuthSession(const void *pAuthTicket, int cbAuthTicket, void* steamID)
 {
-	return static_cast<EBeginAuthSessionResult>(steam::SteamGameServer()->BeginAuthSession(pAuthTicket, cbAuthTicket, *static_cast<steam::CSteamID* >(steamID)));
+	return static_cast<c_EBeginAuthSessionResult>(SteamGameServer()->BeginAuthSession(pAuthTicket, cbAuthTicket, *static_cast<CSteamID* >(steamID)));
 }
 
-extern "C" void SteamGameServer_EndAuthSession(void* steamID)
+extern "C" void c_SteamGameServer_EndAuthSession(void* steamID)
 {
-	steam::SteamGameServer()->EndAuthSession(*static_cast<steam::CSteamID* >(steamID));
+	SteamGameServer()->EndAuthSession(*static_cast<CSteamID* >(steamID));
 }
 
-extern "C" bool SteamGameServerNetworking_IsP2PPacketAvailable(uint32_t *pcubMsgSize, int nChannel)
+extern "C" bool c_SteamGameServerNetworking_IsP2PPacketAvailable(uint32_t *pcubMsgSize, int nChannel)
 {
-	return steam::SteamGameServerNetworking()->IsP2PPacketAvailable(pcubMsgSize, nChannel);
+	return SteamGameServerNetworking()->IsP2PPacketAvailable(pcubMsgSize, nChannel);
 }
 
-extern "C" bool SteamGameServerNetworking_ReadP2PPacket(void *pubDest, uint32_t cubDest, uint32_t *pcubMsgSize, void* psteamIDRemote, int nChannel)
+extern "C" bool c_SteamGameServerNetworking_ReadP2PPacket(void *pubDest, uint32_t cubDest, uint32_t *pcubMsgSize, void* psteamIDRemote, int nChannel)
 {
-	return steam::SteamGameServerNetworking()->ReadP2PPacket(pubDest, cubDest, pcubMsgSize, static_cast<steam::CSteamID* >(psteamIDRemote), nChannel);
+	return SteamGameServerNetworking()->ReadP2PPacket(pubDest, cubDest, pcubMsgSize, static_cast<CSteamID* >(psteamIDRemote), nChannel);
 }
 
-extern "C" uint64_t SteamGameServer_GetSteamID_ConvertToUInt64()
+extern "C" uint64_t c_SteamGameServer_GetSteamID_ConvertToUInt64()
 {
-	return steam::SteamGameServer()->GetSteamID().ConvertToUint64();
+	return SteamGameServer()->GetSteamID().ConvertToUint64();
 }
 
-extern "C" bool SteamGameServer_BSecure()
+extern "C" bool c_SteamGameServer_BSecure()
 {
-	return steam::SteamGameServer()->BSecure();
+	return SteamGameServer()->BSecure();
 }
 
-extern "C" void SteamGameServer_SendUserDisconnect(void* steamIDUser)
+extern "C" void c_SteamGameServer_SendUserDisconnect(void* steamIDUser)
 {
-	steam::SteamGameServer()->SendUserDisconnect(*static_cast<steam::CSteamID *>(steamIDUser));
+	SteamGameServer()->SendUserDisconnect(*static_cast<CSteamID *>(steamIDUser));
 }
 
-extern "C" void SteamGameServer_RunCallbacks()
+extern "C" void c_SteamGameServer_RunCallbacks()
 {
-	steam::SteamGameServer_RunCallbacks();
+	SteamGameServer_RunCallbacks();
 }
 
-extern "C" void SteamGameServer_SetMaxPlayerCount(int cPlayersMax)
+extern "C" void c_SteamGameServer_SetMaxPlayerCount(int cPlayersMax)
 {
-	steam::SteamGameServer()->SetMaxPlayerCount(cPlayersMax);
+	SteamGameServer()->SetMaxPlayerCount(cPlayersMax);
 }
 
-extern "C" void SteamGameServer_SetPasswordProtected(bool bPasswordProtected)
+extern "C" void c_SteamGameServer_SetPasswordProtected(bool bPasswordProtected)
 {
-	steam::SteamGameServer()->SetPasswordProtected(bPasswordProtected);
+	SteamGameServer()->SetPasswordProtected(bPasswordProtected);
 }
 
-extern "C" void SteamGameServer_SetServerName(const char *pszServerName)
+extern "C" void c_SteamGameServer_SetServerName(const char *pszServerName)
 {
-	steam::SteamGameServer()->SetServerName(pszServerName);
+	SteamGameServer()->SetServerName(pszServerName);
 }
 
-extern "C" void SteamGameServer_SetBotPlayerCount(int cBotplayers)
+extern "C" void c_SteamGameServer_SetBotPlayerCount(int cBotplayers)
 {
-	steam::SteamGameServer()->SetBotPlayerCount(cBotplayers);
+	SteamGameServer()->SetBotPlayerCount(cBotplayers);
 }
 
-extern "C" void SteamGameServer_SetMapName(const char *pszMapName)
+extern "C" void c_SteamGameServer_SetMapName(const char *pszMapName)
 {
-	steam::SteamGameServer()->SetMapName(pszMapName);
+	SteamGameServer()->SetMapName(pszMapName);
 }
 
-extern "C" bool SteamGameServer_BUpdateUserData(void* steamIDUser, const char *pchPlayerName, uint32_t uScore)
+extern "C" bool c_SteamGameServer_BUpdateUserData(void* steamIDUser, const char *pchPlayerName, uint32_t uScore)
 {
-	steam::SteamGameServer()->BUpdateUserData(*static_cast<steam::CSteamID* >(steamIDUser), pchPlayerName, uScore);
+	SteamGameServer()->BUpdateUserData(*static_cast<CSteamID* >(steamIDUser), pchPlayerName, uScore);
 }
