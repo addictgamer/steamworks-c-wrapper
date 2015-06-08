@@ -1,0 +1,3 @@
+ * Wrap everything!
+ * Some sort of organization to all the wrapped code would be nice, like splitting different functions across different header files, as opposed to one massive file of all the everything. Or maybe that works too, I don't know.
+ * A proper FindSTEAMWORKS.cmake module that can handle finding the 32 and 64 bit versions of the library for windows, linux, and OSX. Currently, I haven't yet tested it on OSX and it could be done better for determining the desired version of the library (32 or 64 bit) on Windows. Linux only grabs the 64 bit version currently.
