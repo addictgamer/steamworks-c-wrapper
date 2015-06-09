@@ -3,6 +3,8 @@
  * See LICENSE for details.
  */
 
+#include <string>
+
 extern "C"
 {
 	#include "steam_wrapper.h"
@@ -161,4 +163,46 @@ extern "C" void c_SteamGameServer_SetMapName(const char *pszMapName)
 extern "C" bool c_SteamGameServer_BUpdateUserData(void* steamIDUser, const char *pchPlayerName, uint32_t uScore)
 {
 	return SteamGameServer()->BUpdateUserData(*static_cast<CSteamID* >(steamIDUser), pchPlayerName, uScore);
+}
+
+extern "C" int64_t c_SteamUtils_GetAppID()
+{
+	return SteamUtils()->GetAppID();
+}
+
+/*ISteamUserStats *m_pSteamUserStats;
+
+extern "C" bool init_m_pSteamUserStats()
+{
+	m_pSteamUserStats = SteamUserStats();
+	if (m_pSteamUserStats)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+extern "C" int c_m_pSteamUserStats_GetAchievementIcon(const char *pchName)
+{
+	std::string ID = pchName;
+	return m_pSteamUserStats->GetAchievementIcon(ID);
+}*/
+
+bool c_SteamUser()
+{
+	if (SteamUser())
+	{
+		return true;
+	}
+	return false;
+}
+
+bool c_SteamUserStats()
+{
+	if (SteamUserStats())
+	{
+		return true;
+	}
+	return false;
 }

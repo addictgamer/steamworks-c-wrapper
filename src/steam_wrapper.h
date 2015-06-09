@@ -133,4 +133,24 @@ bool c_SteamGameServer_BUpdateUserData(void* steamIDUser, const char *pchPlayerN
 #define STEAM_CALLBACK(thisclass, func, param, var) CCallback< thisclass, param, false > var; void func(param *pParam)
 #endif
 
+int64_t c_SteamUtils_GetAppID();
+
+/*
+ * Call this before calling any function with m_pSteamUserStats in the name.
+ * Returns false if the steam function returns NULL, true if it returns a pointer to the created m_pSteamUserStats.
+ */
+//bool init_m_pSteamUserStats();
+
+//int c_m_pSteamUserStats_GetAchievementIcon(const char *pchName);
+
+/*
+ * NOTE: The steam api returns a pointer to ISteamUser. Since C can't see classes, this function returns false if SteamUser() returns NULL, true otherwise (useful for checking if steam was initialized, for example).
+ */
+bool c_SteamUser();
+
+/*
+ * NOTE: The steam api returns a pointer to ISteamUserStats. Since C can't see classes, this function returns false if SteamUserStats() returns NULL, true otherwise (useful for checking if steam was initialized, for example).
+ */
+bool c_SteamUserStats();
+
 #endif
