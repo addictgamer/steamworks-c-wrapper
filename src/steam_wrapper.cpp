@@ -206,3 +206,8 @@ bool c_SteamUserStats()
 	}
 	return false;
 }
+
+bool c_SteamUserStats_RequestCurrentStats()
+{
+	return SteamUserStats()->RequestCurrentStats();
+}

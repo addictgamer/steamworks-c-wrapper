@@ -153,4 +153,6 @@ bool c_SteamUser();
  */
 bool c_SteamUserStats();
 
+bool c_SteamUserStats_RequestCurrentStats();
+
 #endif
