@@ -128,4 +128,9 @@ void c_SteamGameServer_SetMapName(const char *pszMapName);
 
 bool c_SteamGameServer_BUpdateUserData(void* steamIDUser, const char *pchPlayerName, uint32_t uScore);
 
+//Will this work? I foresee this being a possible source of problems.
+#ifndef STEAM_CALLBACK
+#define STEAM_CALLBACK(thisclass, func, param, var) CCallback< thisclass, param, false > var; void func(param *pParam)
+#endif
+
 #endif

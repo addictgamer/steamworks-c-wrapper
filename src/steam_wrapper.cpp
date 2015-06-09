@@ -6,6 +6,7 @@
 extern "C"
 {
 	#include "steam_wrapper.h"
+	#undef STEAM_CALLBACK //This is defined for the C code.
 }
 
 #include <steam/steam_api.h>
