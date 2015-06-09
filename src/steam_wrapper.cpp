@@ -198,7 +198,7 @@ extern "C" bool c_SteamUserStats_SetAchievement(const char *pchName)
 	return SteamUserStats()->SetAchievement(pchName);
 }
 
-extern "C" int SteamUserStats_GetAchievementIcon(const char *pchName)
+extern "C" int c_SteamUserStats_GetAchievementIcon(const char *pchName)
 {
 	return SteamUserStats()->GetAchievementIcon(pchName);
 }

@@ -149,6 +149,6 @@ bool c_SteamUserStats_RequestCurrentStats();
 
 bool c_SteamUserStats_SetAchievement(const char *pchName);
 
-int SteamUserStats_GetAchievementIcon(const char *pchName);
+int c_SteamUserStats_GetAchievementIcon(const char *pchName);
 
 #endif
