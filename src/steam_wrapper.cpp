@@ -170,26 +170,7 @@ extern "C" int64_t c_SteamUtils_GetAppID()
 	return SteamUtils()->GetAppID();
 }
 
-/*ISteamUserStats *m_pSteamUserStats;
-
-extern "C" bool init_m_pSteamUserStats()
-{
-	m_pSteamUserStats = SteamUserStats();
-	if (m_pSteamUserStats)
-	{
-		return true;
-	}
-
-	return false;
-}
-
-extern "C" int c_m_pSteamUserStats_GetAchievementIcon(const char *pchName)
-{
-	std::string ID = pchName;
-	return m_pSteamUserStats->GetAchievementIcon(ID);
-}*/
-
-bool c_SteamUser()
+extern "C" bool c_SteamUser()
 {
 	if (SteamUser())
 	{
@@ -198,7 +179,7 @@ bool c_SteamUser()
 	return false;
 }
 
-bool c_SteamUserStats()
+extern "C" bool c_SteamUserStats()
 {
 	if (SteamUserStats())
 	{
@@ -207,7 +188,17 @@ bool c_SteamUserStats()
 	return false;
 }
 
-bool c_SteamUserStats_RequestCurrentStats()
+extern "C" bool c_SteamUserStats_RequestCurrentStats()
 {
 	return SteamUserStats()->RequestCurrentStats();
+}
+
+extern "C" bool c_SteamUserStats_SetAchievement(const char *pchName)
+{
+	return SteamUserStats()->SetAchievement(pchName);
+}
+
+extern "C" int SteamUserStats_GetAchievementIcon(const char *pchName)
+{
+	return SteamUserStats()->GetAchievementIcon(pchName);
 }

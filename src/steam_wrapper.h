@@ -136,14 +136,6 @@ bool c_SteamGameServer_BUpdateUserData(void* steamIDUser, const char *pchPlayerN
 int64_t c_SteamUtils_GetAppID();
 
 /*
- * Call this before calling any function with m_pSteamUserStats in the name.
- * Returns false if the steam function returns NULL, true if it returns a pointer to the created m_pSteamUserStats.
- */
-//bool init_m_pSteamUserStats();
-
-//int c_m_pSteamUserStats_GetAchievementIcon(const char *pchName);
-
-/*
  * NOTE: The steam api returns a pointer to ISteamUser. Since C can't see classes, this function returns false if SteamUser() returns NULL, true otherwise (useful for checking if steam was initialized, for example).
  */
 bool c_SteamUser();
@@ -154,5 +146,9 @@ bool c_SteamUser();
 bool c_SteamUserStats();
 
 bool c_SteamUserStats_RequestCurrentStats();
+
+bool c_SteamUserStats_SetAchievement(const char *pchName);
+
+int SteamUserStats_GetAchievementIcon(const char *pchName);
 
 #endif
