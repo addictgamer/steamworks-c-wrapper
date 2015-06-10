@@ -202,3 +202,13 @@ extern "C" int c_SteamUserStats_GetAchievementIcon(const char *pchName)
 {
 	return SteamUserStats()->GetAchievementIcon(pchName);
 }
+
+extern "C" bool c_SteamUserStats_SetStat(const char *pchName, int32_t nData)
+{
+	return SteamUserStats()->SetStat(pchName, nData);
+}
+
+extern "C" bool c_SteamUserStats_UpdateAvgRateStat(const char *pchName, float flCountThisSession, double dSessionLength)
+{
+	return SteamUserStats()->UpdateAvgRateStat(pchName, flCountThisSession, dSessionLength);
+}
