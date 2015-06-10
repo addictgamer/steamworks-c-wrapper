@@ -227,3 +227,8 @@ extern "C" bool c_SteamUserStats_StoreStats()
 {
 	return SteamUserStats()->StoreStats();
 }
+
+extern "C" const char* c_SteamUserStats_GetAchievementDisplayAttribute(const char *pchName, const char *pchKey)
+{
+	return SteamUserStats()->GetAchievementDisplayAttribute(pchName, pchKey);
+}

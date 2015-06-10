@@ -161,4 +161,6 @@ bool c_SteamUserStats_GetStat_Float(const char *pchName, float *pData);
 
 bool c_SteamUserStats_StoreStats();
 
+const char* c_SteamUserStats_GetAchievementDisplayAttribute(const char *pchName, const char *pchKey);
+
 #endif
