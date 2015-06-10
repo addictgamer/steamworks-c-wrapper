@@ -159,4 +159,6 @@ bool c_SteamUserStats_GetStat_Int(const char *pchName, int32_t *pData);
 
 bool c_SteamUserStats_GetStat_Float(const char *pchName, float *pData);
 
+bool c_SteamUserStats_StoreStats();
+
 #endif

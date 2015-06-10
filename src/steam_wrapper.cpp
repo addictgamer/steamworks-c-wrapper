@@ -222,3 +222,8 @@ extern "C" bool c_SteamUserStats_GetStat_Float(const char *pchName, float *pData
 {
 	return SteamUserStats()->GetStat(pchName, pData);
 }
+
+extern "C" bool c_SteamUserStats_StoreStats()
+{
+	return SteamUserStats()->StoreStats();
+}
