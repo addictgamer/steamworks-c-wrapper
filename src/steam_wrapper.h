@@ -157,8 +157,11 @@ bool c_SteamUserStats_SetStat(const char *pchName, int32_t nData);
 
 bool c_SteamUserStats_UpdateAvgRateStat(const char *pchName, float flCountThisSession, double dSessionLength);
 
+/*
+ * NOTE: This is an overloaded function, which is not possible in C, so it must be worked around with trickery.
+ * Such as renaming the function.
+ */
 bool c_SteamUserStats_GetStat_Int(const char *pchName, int32_t *pData);
-
 bool c_SteamUserStats_GetStat_Float(const char *pchName, float *pData);
 
 bool c_SteamUserStats_StoreStats();
