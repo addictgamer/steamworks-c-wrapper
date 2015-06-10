@@ -40,6 +40,11 @@ extern "C" bool c_SteamUser_BLoggedOn()
 	return SteamUser()->BLoggedOn();
 }
 
+extern "C" void c_SteamAPI_RunCallbacks()
+{
+	return SteamAPI_RunCallbacks();
+}
+
 extern "C" bool c_SteamGameServer_Init(uint32_t unIP, uint16_t usSteamPort, uint16_t usGamePort, uint16_t usQueryPort, c_EServerMode eServerMode, const char* pchVersionString)
 {
 	return SteamGameServer_Init(unIP, usSteamPort, usGamePort, usQueryPort, static_cast<EServerMode>(eServerMode), pchVersionString);
@@ -85,7 +90,7 @@ extern "C" void c_SteamGameServer_LogOff()
 	SteamGameServer()->LogOff();
 }
 
-extern "C" void c_teamGameServerNetworking_AcceptP2PSessionWithUser(void* steamIDRemote)
+extern "C" void c_SteamGameServerNetworking_AcceptP2PSessionWithUser(void* steamIDRemote)
 {
 	SteamGameServerNetworking()->AcceptP2PSessionWithUser(*static_cast<CSteamID* >(steamIDRemote));
 }

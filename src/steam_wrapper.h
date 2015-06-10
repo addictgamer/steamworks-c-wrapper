@@ -16,6 +16,8 @@ bool c_SteamAPI_RestartAppIfNecessary(uint32_t unOwnAppID);
 
 bool c_SteamUser_BLoggedOn();
 
+void c_SteamAPI_RunCallbacks();
+
 typedef enum c_EServerMode_t
 {
 	c_eServerModeInvalid = 0,
