@@ -212,3 +212,8 @@ extern "C" bool c_SteamUserStats_UpdateAvgRateStat(const char *pchName, float fl
 {
 	return SteamUserStats()->UpdateAvgRateStat(pchName, flCountThisSession, dSessionLength);
 }
+
+extern "C" bool c_SteamUserStats_GetStat(const char *pchName, int32_t *pData)
+{
+	return SteamUserStats()->GetStat(pchName, pData);
+}
