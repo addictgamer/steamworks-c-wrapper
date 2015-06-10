@@ -155,6 +155,8 @@ bool c_SteamUserStats_SetStat(const char *pchName, int32_t nData);
 
 bool c_SteamUserStats_UpdateAvgRateStat(const char *pchName, float flCountThisSession, double dSessionLength);
 
-bool c_SteamUserStats_GetStat(const char *pchName, int32_t *pData);
+bool c_SteamUserStats_GetStat_Int(const char *pchName, int32_t *pData);
+
+bool c_SteamUserStats_GetStat_Float(const char *pchName, float *pData);
 
 #endif
