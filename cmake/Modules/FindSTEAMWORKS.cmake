@@ -42,6 +42,13 @@ if (NOT STEAMWORKS_INCLUDE_DIR OR NOT STEAMWORKS_LIBRARIES)
 			)
 			MESSAGE("64 bit steam")
 		endif()
+	elseif (APPLE)
+		FIND_LIBRARY(STEAMWORKS_LIBRARY NAMES steam_api
+			PATHS
+			$ENV{STEAMWORKS_ROOT}/sdk/redistributable_bin
+			$ENV{STEAMWORKS_ROOT}/sdk/redistributable_bin/osx32
+			DOC "Steamworks library name"
+		)
 	else ()
 		FIND_LIBRARY(STEAMWORKS_LIBRARY NAMES steam_api
 			PATHS ${LIB_SEARCH_PATHS}
