@@ -207,4 +207,14 @@ void* c_SteamMatchmaking_GetLobbyMemberByIndex(void *steamIDLobby, int iMember);
  */
 const char* c_SteamFriends_GetFriendPersonaName(void *steamIDLobbyMember);
 
+/*
+ * NOTE: In C++, this would be used like so:
+ CSteamID steamIDLobby;
+ CSteamID steamIDUser;
+ ...
+ const char *data = SteamMatchmaking()->GetLobbyMemberData(steamIDLobby, steamIDLobbyMember, "whatever");
+ * This is C, so pass a void pointer of the CSteamIDs you want to use to steamIDLobby and steamIDUser.
+ */
+const char* c_SteamMatchmaking_GetLobbyMemberData(void *steamIDLobby, void *steamIDUser, const char *pchKey);
+
 #endif

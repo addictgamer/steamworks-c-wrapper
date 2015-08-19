@@ -261,3 +261,8 @@ extern "C" const char* c_SteamFriends_GetFriendPersonaName(void *steamIDLobbyMem
 {
 	return SteamFriends()->GetFriendPersonaName(*static_cast<CSteamID*>(steamIDLobbyMember));
 }
+
+extern "C" const char* c_SteamMatchmaking_GetLobbyMemberData(void *steamIDLobby, void *steamIDUser, const char *pchKey)
+{
+	return SteamMatchmaking()->GetLobbyMemberData(*static_cast<CSteamID*>(steamIDLobby), *static_cast<CSteamID*>(steamIDUser), pchKey);
+}
