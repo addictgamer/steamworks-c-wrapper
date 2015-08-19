@@ -302,4 +302,14 @@ void c_SteamMatchmaking_AddRequestLobbyListNearValueFilter(const char *pchKeyToM
 
 void c_SteamMatchmaking_AddRequestLobbyListFilterSlotsAvailable(int nSlotsAvailable);
 
+typedef enum c_ELobbyType_t
+{
+	c_k_ELobbyTypePrivate = 0,
+	c_k_ELobbyTypeFriendsOnly = 1,
+	c_k_ELobbyTypePublic = 2,
+	c_k_ELobbyTypeInvisible = 3,
+} c_ELobbyType;
+
+c_SteamAPICall_t c_SteamMatchmaking_CreateLobby(c_ELobbyType eLobbyType, int cMaxMembers);
+
 #endif

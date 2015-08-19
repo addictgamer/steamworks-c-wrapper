@@ -343,3 +343,8 @@ extern "C" void c_SteamMatchmaking_AddRequestLobbyListFilterSlotsAvailable(int n
 {
 	SteamMatchmaking()->AddRequestLobbyListFilterSlotsAvailable(nSlotsAvailable);
 }
+
+extern "C" c_SteamAPICall_t c_SteamMatchmaking_CreateLobby(c_ELobbyType eLobbyType, int cMaxMembers)
+{
+	return SteamMatchmaking()->CreateLobby(static_cast<ELobbyType>(eLobbyType), cMaxMembers);
+}
