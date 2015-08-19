@@ -193,7 +193,18 @@ int c_SteamMatchmaking_GetNumLobbyMembers(void *CSteamID_instance);
  ...
  CSteamID steamIDLobbyMember = SteamMatchmaking()->GetLobbyMemberByIndex(steamIDLobby, index);
  * This is C, so pass a void pointer to the CSteamID you want to use.
+ * Note that this function calls new to hold the data SteamMatchmaking()->GetLobbyMemberByIndex() returns.
+ * TODO: Does that data need to be explicitly deleted? I'd assume so. Need to write a wrapper to do that?
  */
 void* c_SteamMatchmaking_GetLobbyMemberByIndex(void *steamIDLobby, int iMember);
+
+/*
+ * NOTE: In C++, this would be used like so:
+ CSteamID steamIDLobbyMember;
+ ...
+ const char *name = SteamFriends()->GetFriendPersonaName(steamIDLobbyMember);
+ * This is C, so pass a void pointer to the CSteamID you want to use.
+ */
+const char* c_SteamFriends_GetFriendPersonaName(void *steamIDLobbyMember);
 
 #endif

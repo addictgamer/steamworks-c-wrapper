@@ -256,3 +256,8 @@ extern "C" void* c_SteamMatchmaking_GetLobbyMemberByIndex(void *steamIDLobby, in
 	*id = SteamMatchmaking()->GetLobbyMemberByIndex(*static_cast<CSteamID*>(steamIDLobby), iMember);
 	return id; //Still don't like this method.
 }
+
+extern "C" const char* c_SteamFriends_GetFriendPersonaName(void *steamIDLobbyMember)
+{
+	return SteamFriends()->GetFriendPersonaName(*static_cast<CSteamID*>(steamIDLobbyMember));
+}
