@@ -354,8 +354,12 @@ extern "C" c_SteamAPICall_t c_SteamMatchmaking_JoinLobby(void *steamIDLobby)
 	return SteamMatchmaking()->JoinLobby(*static_cast<CSteamID*>(steamIDLobby));
 }
 
-//bool 	SetLobbyData (CSteamID steamIDLobby, const char *pchKey, const char *pchValue)
 extern "C" bool c_SteamMatchmaking_SetLobbyData(void *steamIDLobby, const char *pchKey, const char *pchValue)
 {
 	return SteamMatchmaking()->SetLobbyData(*static_cast<CSteamID*>(steamIDLobby), pchKey, pchValue);
+}
+
+extern "C" bool c_SteamMatchmaking_DeleteLobbyData(void *steamIDLobby, const char *pchKey)
+{
+	return SteamMatchmaking()->DeleteLobbyData(*static_cast<CSteamID*>(steamIDLobby), pchKey);
 }
