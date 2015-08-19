@@ -297,3 +297,8 @@ extern "C" void* c_SteamMatchmaking_GetLobbyByIndex(int iLobby)
 	*id = SteamMatchmaking()->GetLobbyByIndex(iLobby);
 	return id;
 }
+
+extern "C" bool c_SteamMatchmaking_RequestLobbyData(void *steamIDLobby)
+{
+	return SteamMatchmaking()->RequestLobbyData(*static_cast<CSteamID*>(steamIDLobby));
+}

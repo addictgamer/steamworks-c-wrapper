@@ -250,6 +250,15 @@ typedef uint64_t c_SteamAPICall_t;
  * NOTE: This function calls new to hold the data SteamMatchmaking()->GetLobbyByIndex() returns.
  * TODO: Does that data need to be explicitly deleted? I'd assume so. Need to write a wrapper to do that?
  */
-extern "C" void* c_SteamMatchmaking_GetLobbyByIndex(int iLobby);
+void* c_SteamMatchmaking_GetLobbyByIndex(int iLobby);
+
+/*
+ * NOTE: In C++, this would be used like so:
+ CSteamID steamIDLobby;
+ ...
+ SteamMatchmaking()->RequestLobbyData(steamIDLobby);
+ * This is C< so pass a void pointer of the CSteamID you want to use to steamIDLobby.
+ */
+bool c_SteamMatchmaking_RequestLobbyData(void *steamIDLobby);
 
 #endif
