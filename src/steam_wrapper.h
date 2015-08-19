@@ -190,7 +190,7 @@ bool c_CSteamID_IsValid(void *CSteamID_instance);
  SteamMatchmaking()->GetNumLobbyMembers(steamIDLobby);
  * This is C, so pass a void pointer to the CSteamID you want to use.
  */
-int c_SteamMatchmaking_GetNumLobbyMembers(void *CSteamID_instance);
+int c_SteamMatchmaking_GetNumLobbyMembers(void *steamIDLobby);
 
 /*
  * NOTE: Returns a void pointer to a CSteamID.
@@ -243,5 +243,7 @@ void* c_SteamMatchmaking_GetLobbyOwner(void *steamIDLobby);
  * This is C, so pass void pointers of the CSteamIDs you want to use to steamIDUser and steamIDSource.
  */
 bool c_SteamFriends_IsUserInSource(void *steamIDUser, void *steamIDSource);
+
+typedef uint64_t c_SteamAPICall_t;
 
 #endif

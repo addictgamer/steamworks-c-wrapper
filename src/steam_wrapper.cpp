@@ -250,9 +250,9 @@ extern "C" bool c_CSteamID_IsValid(void *CSteamID_instance)
 	return static_cast<CSteamID*>(CSteamID_instance)->IsValid();
 }
 
-extern "C" int c_SteamMatchmaking_GetNumLobbyMembers(void *CSteamID_instance)
+extern "C" int c_SteamMatchmaking_GetNumLobbyMembers(void *steamIDLobby)
 {
-	return SteamMatchmaking()->GetNumLobbyMembers(*static_cast<CSteamID*>(CSteamID_instance)); //This looks ugly. Will it work?
+	return SteamMatchmaking()->GetNumLobbyMembers(*static_cast<CSteamID*>(steamIDLobby)); //This looks ugly. Will it work?
 }
 
 extern "C" void* c_SteamMatchmaking_GetLobbyMemberByIndex(void *steamIDLobby, int iMember)
@@ -284,4 +284,9 @@ extern "C" void* c_SteamMatchmaking_GetLobbyOwner(void *steamIDLobby)
 extern "C" bool c_SteamFriends_IsUserInSource(void *steamIDUser, void *steamIDSource)
 {
 	return SteamFriends()->IsUserInSource(*static_cast<CSteamID*>(steamIDUser), *static_cast<CSteamID*>(steamIDSource));
+}
+
+extern "C" c_SteamAPICall_t c_SteamMatchmaking_RequestLobbyList()
+{
+	return SteamMatchmaking()->RequestLobbyList();
 }
