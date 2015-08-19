@@ -168,4 +168,32 @@ bool c_SteamUserStats_StoreStats();
 
 const char* c_SteamUserStats_GetAchievementDisplayAttribute(const char *pchName, const char *pchKey);
 
+/*
+ * NOTE: In C++, this would be used like so:
+ CSteamID steamIDLobby;
+ ...
+ steamIDLobby.IsValid();
+ * This is C, so pass a void pointer to the CSteamID you want to check.
+ */
+bool c_CSteamID_IsValid(void *CSteamID_instance);
+
+/*
+ * NOTE: In C++, this would be used like so:
+ CSteamID steamIDLobby;
+ ...
+ SteamMatchmaking()->GetNumLobbyMembers(steamIDLobby);
+ * This is C, so pass a void pointer to the CSteamID you want to use.
+ */
+int c_SteamMatchmaking_GetNumLobbyMembers(void *CSteamID_instance);
+
+/*
+ * NOTE: Returns a void pointer to a CSteamID.
+ * In C++, this would be used like so:
+ CSteamID steamIDLobby;
+ ...
+ CSteamID steamIDLobbyMember = SteamMatchmaking()->GetLobbyMemberByIndex(steamIDLobby, index);
+ * This is C, so pass a void pointer to the CSteamID you want to use.
+ */
+void* SteamMatchmaking_GetLobbyMemberByIndex(void *steamIDLobby, int iMember);
+
 #endif

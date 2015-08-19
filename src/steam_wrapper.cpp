@@ -237,3 +237,19 @@ extern "C" const char* c_SteamUserStats_GetAchievementDisplayAttribute(const cha
 {
 	return SteamUserStats()->GetAchievementDisplayAttribute(pchName, pchKey);
 }
+
+extern "C" bool c_CSteamID_IsValid(void *CSteamID_instance)
+{
+	return static_cast<CSteamID*>(CSteamID_instance)->IsValid();
+}
+
+extern "C" int c_SteamMatchmaking_GetNumLobbyMembers(void *CSteamID_instance)
+{
+	return SteamMatchmaking()->GetNumLobbyMembers(*static_cast<CSteamID*>(CSteamID_instance)); //This looks ugly. Will it work?
+}
+
+void* SteamMatchmaking_GetLobbyMemberByIndex(void *steamIDLobby, int iMember)
+{
+	CSteamID id = SteamMatchmaking()->GetLobbyMemberByIndex(*static_cast<CSteamID*>(steamIDLobby), iMember);
+	return static_cast<void*>(&id);
+}
