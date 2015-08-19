@@ -348,3 +348,8 @@ extern "C" c_SteamAPICall_t c_SteamMatchmaking_CreateLobby(c_ELobbyType eLobbyTy
 {
 	return SteamMatchmaking()->CreateLobby(static_cast<ELobbyType>(eLobbyType), cMaxMembers);
 }
+
+extern "C" c_SteamAPICall_t c_SteamMatchmaking_JoinLobby(void *steamIDLobby)
+{
+	return SteamMatchmaking()->JoinLobby(*static_cast<CSteamID*>(steamIDLobby));
+}
