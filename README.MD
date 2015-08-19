@@ -25,7 +25,7 @@ Windows users, please let me know how you do it.
 
 Using this library
 ------------------
- * Include steam_wrapper.h (should be #include \<steamworks_cwrapper/steam_wrapper.h>) (if you're reading the raw text file, the \ is to escape GitHub Flavored Markdown)
+ * Include steam_wrapper.h (should be #include \<steamworks_cwrapper/steam_wrapper.h>) (if you're reading this as a raw text file instead of on GitHub, the \ is to escape GitHub Flavored Markdown)
  * Take a look at steam_wrapper.h. Note two things: 1) Everything's prepended with c_. So you'd call c_SteamAPI_Init() instead of SteamAPI_Init().
     2) A class's member function is called by c_SomeClass_DoSomething(), instead of SomeClass::DoSomething() or SomeClass_instance.DoSomething().
 
