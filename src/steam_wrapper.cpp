@@ -250,6 +250,9 @@ extern "C" int c_SteamMatchmaking_GetNumLobbyMembers(void *CSteamID_instance)
 
 extern "C" void* c_SteamMatchmaking_GetLobbyMemberByIndex(void *steamIDLobby, int iMember)
 {
-	CSteamID id = SteamMatchmaking()->GetLobbyMemberByIndex(*static_cast<CSteamID*>(steamIDLobby), iMember);
-	return static_cast<void*>(&id);
+	//CSteamID id = SteamMatchmaking()->GetLobbyMemberByIndex(*static_cast<CSteamID*>(steamIDLobby), iMember);
+	//return static_cast<void*>(&id);
+	CSteamID *id = new CSteamID();
+	*id = SteamMatchmaking()->GetLobbyMemberByIndex(*static_cast<CSteamID*>(steamIDLobby), iMember);
+	return id; //Still don't like this method.
 }
