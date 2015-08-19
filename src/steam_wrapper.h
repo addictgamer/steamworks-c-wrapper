@@ -194,6 +194,6 @@ int c_SteamMatchmaking_GetNumLobbyMembers(void *CSteamID_instance);
  CSteamID steamIDLobbyMember = SteamMatchmaking()->GetLobbyMemberByIndex(steamIDLobby, index);
  * This is C, so pass a void pointer to the CSteamID you want to use.
  */
-void* SteamMatchmaking_GetLobbyMemberByIndex(void *steamIDLobby, int iMember);
+void* c_SteamMatchmaking_GetLobbyMemberByIndex(void *steamIDLobby, int iMember);
 
 #endif

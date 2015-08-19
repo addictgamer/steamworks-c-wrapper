@@ -248,7 +248,7 @@ extern "C" int c_SteamMatchmaking_GetNumLobbyMembers(void *CSteamID_instance)
 	return SteamMatchmaking()->GetNumLobbyMembers(*static_cast<CSteamID*>(CSteamID_instance)); //This looks ugly. Will it work?
 }
 
-void* SteamMatchmaking_GetLobbyMemberByIndex(void *steamIDLobby, int iMember)
+extern "C" void* c_SteamMatchmaking_GetLobbyMemberByIndex(void *steamIDLobby, int iMember)
 {
 	CSteamID id = SteamMatchmaking()->GetLobbyMemberByIndex(*static_cast<CSteamID*>(steamIDLobby), iMember);
 	return static_cast<void*>(&id);
