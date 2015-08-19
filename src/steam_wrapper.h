@@ -279,4 +279,9 @@ bool c_SteamUtils_IsAPICallCompleted(ulong hSteamAPICall, bool *pbFailed);
 
 bool c_SteamUtils_GetAPICallResult(c_SteamAPICall_t hSteamAPICall, void* pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed);
 
+/*
+ * NOTE: This is C, so pass a void pointer to the LobbyMatchList_t you want to grab the m_nLobbiesMatching variable from.
+ */
+uint32_t c_LobbyMatchList_t_m_nLobbiesMatching(void *LobbyMatchList_t_instance);
+
 #endif

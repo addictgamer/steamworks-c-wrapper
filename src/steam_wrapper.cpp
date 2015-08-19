@@ -318,3 +318,8 @@ extern "C" bool c_SteamUtils_GetAPICallResult(c_SteamAPICall_t hSteamAPICall, vo
 {
 	return SteamUtils()->GetAPICallResult(hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
 }
+
+extern "C" uint32_t c_LobbyMatchList_t_m_nLobbiesMatching(void *LobbyMatchList_t_instance)
+{
+	return static_cast<LobbyMatchList_t*>(LobbyMatchList_t_instance)->m_nLobbiesMatching;
+}
