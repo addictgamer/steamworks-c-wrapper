@@ -143,6 +143,12 @@ int64_t c_SteamUtils_GetAppID();
 bool c_SteamUser();
 
 /*
+ * Note that this function calls new to hold the data SteamUser()->GetSteamID() returns.
+ * TODO: Does that data need to be explicitly deleted? I'd assume so. Need to write a wrapper to do that?
+ */
+void* c_SteamUser_GetSteamID();
+
+/*
  * NOTE: The steam api returns a pointer to ISteamUserStats. Since C can't see classes, this function returns false if SteamUserStats() returns NULL, true otherwise (useful for checking if steam was initialized, for example).
  */
 bool c_SteamUserStats();
@@ -216,5 +222,16 @@ const char* c_SteamFriends_GetFriendPersonaName(void *steamIDLobbyMember);
  * This is C, so pass a void pointer of the CSteamIDs you want to use to steamIDLobby and steamIDUser.
  */
 const char* c_SteamMatchmaking_GetLobbyMemberData(void *steamIDLobby, void *steamIDUser, const char *pchKey);
+
+/*
+ * NOTE: In C++, this would be used like so:
+ CSteamID steamIDLobby;
+ ...
+ CSteamID id = SteamMatchmaking()->GetLobbyOwner(steamIDLobby);
+ * This is C, so pass a void pointer of the CSteamID you want to use to steamIDLobby.
+ * Note that this function calls new to hold the data SteamMatchmaking()->GetLobbyOwner() returns.
+ * TODO: Does that data need to be explicitly deleted? I'd assume so. Need to write a wrapper to do that?
+ */
+void* c_SteamMatchmaking_GetLobbyOwner(void *steamIDLobby);
 
 #endif

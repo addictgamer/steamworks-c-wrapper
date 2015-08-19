@@ -184,6 +184,13 @@ extern "C" bool c_SteamUser()
 	return false;
 }
 
+extern "C" void* c_SteamUser_GetSteamID()
+{
+	CSteamID *id = new CSteamID();
+	*id = SteamUser()->GetSteamID();
+	return id; //Still don't like this method.
+}
+
 extern "C" bool c_SteamUserStats()
 {
 	if (SteamUserStats())
@@ -265,4 +272,11 @@ extern "C" const char* c_SteamFriends_GetFriendPersonaName(void *steamIDLobbyMem
 extern "C" const char* c_SteamMatchmaking_GetLobbyMemberData(void *steamIDLobby, void *steamIDUser, const char *pchKey)
 {
 	return SteamMatchmaking()->GetLobbyMemberData(*static_cast<CSteamID*>(steamIDLobby), *static_cast<CSteamID*>(steamIDUser), pchKey);
+}
+
+extern "C" void* c_SteamMatchmaking_GetLobbyOwner(void *steamIDLobby)
+{
+	CSteamID *id = new CSteamID();
+	*id = SteamMatchmaking()->GetLobbyOwner(*static_cast<CSteamID*>(steamIDLobby));
+	return id; //Still don't like this method.
 }
