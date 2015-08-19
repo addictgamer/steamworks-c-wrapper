@@ -257,8 +257,20 @@ void* c_SteamMatchmaking_GetLobbyByIndex(int iLobby);
  CSteamID steamIDLobby;
  ...
  SteamMatchmaking()->RequestLobbyData(steamIDLobby);
- * This is C< so pass a void pointer of the CSteamID you want to use to steamIDLobby.
+ * This is C, so pass a void pointer of the CSteamID you want to use to steamIDLobby.
  */
 bool c_SteamMatchmaking_RequestLobbyData(void *steamIDLobby);
+
+typedef uint32_t c_AccountID_t;
+
+/*
+ * NOTE: In C++, this would be used like so:
+ CSteamID id;
+ ...
+ AccountID_t account_id = id.GetAccountID();
+ * This is C, so pass a void pointer to the CSteamID you want to call GetAccountID() from.
+ */
+//steamIDLobby.GetAccountID()
+c_AccountID_t c_CSteamID_GetAccountID(void *CSteamID_instance);
 
 #endif

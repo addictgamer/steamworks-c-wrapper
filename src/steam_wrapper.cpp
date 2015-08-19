@@ -302,3 +302,9 @@ extern "C" bool c_SteamMatchmaking_RequestLobbyData(void *steamIDLobby)
 {
 	return SteamMatchmaking()->RequestLobbyData(*static_cast<CSteamID*>(steamIDLobby));
 }
+
+//steamIDLobby.GetAccountID()
+extern "C" c_AccountID_t c_CSteamID_GetAccountID(void *CSteamID_instance)
+{
+	return static_cast<CSteamID*>(CSteamID_instance)->GetAccountID();
+}
