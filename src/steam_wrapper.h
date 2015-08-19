@@ -313,8 +313,13 @@ typedef enum c_ELobbyType_t
 c_SteamAPICall_t c_SteamMatchmaking_CreateLobby(c_ELobbyType eLobbyType, int cMaxMembers);
 
 /*
- * NOTE: This is C< so pass a void pointer to the CSteamID you want to use for steamIDLobby.
+ * NOTE: This is C, so pass a void pointer to the CSteamID you want to use for steamIDLobby.
  */
 c_SteamAPICall_t c_SteamMatchmaking_JoinLobby(void *steamIDLobby);
+
+/*
+ * NOTE: This is C, so pass a void pointer to the CSteamID you want to use for steamIDLobby.
+ */
+bool c_SteamMatchmaking_SetLobbyData(void *steamIDLobby, const char *pchKey, const char *pchValue);
 
 #endif
