@@ -284,4 +284,16 @@ bool c_SteamUtils_GetAPICallResult(c_SteamAPICall_t hSteamAPICall, void* pCallba
  */
 uint32_t c_LobbyMatchList_t_m_nLobbiesMatching(void *LobbyMatchList_t_instance);
 
+typedef enum c_ELobbyComparison_t
+{
+	c_k_ELobbyComparisonEqualToOrLessThan = -2,
+	c_k_ELobbyComparisonLessThan = -1,
+	c_k_ELobbyComparisonEqual = 0,
+	c_k_ELobbyComparisonGreaterThan = 1,
+	c_k_ELobbyComparisonEqualToOrGreaterThan = 2,
+	c_k_ELobbyComparisonNotEqual = 3,
+} c_ELobbyComparison;
+
+void c_AddRequestLobbyListStringFilter(const char *pchKeyToMatch, const char *pchValueToMatch, c_ELobbyComparison eComparisonType);
+
 #endif

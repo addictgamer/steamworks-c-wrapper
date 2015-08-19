@@ -323,3 +323,8 @@ extern "C" uint32_t c_LobbyMatchList_t_m_nLobbiesMatching(void *LobbyMatchList_t
 {
 	return static_cast<LobbyMatchList_t*>(LobbyMatchList_t_instance)->m_nLobbiesMatching;
 }
+
+extern "C" void c_AddRequestLobbyListStringFilter(const char *pchKeyToMatch, const char *pchValueToMatch, c_ELobbyComparison eComparisonType)
+{
+	SteamMatchmaking()->AddRequestLobbyListStringFilter(pchKeyToMatch, pchValueToMatch, static_cast<ELobbyComparison>(eComparisonType));
+}
