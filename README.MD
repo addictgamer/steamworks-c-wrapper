@@ -25,9 +25,9 @@ Windows users, please let me know how you do it.
 
 Using this library
 ------------------
- * Include steam_wrapper.h (should be #include <steamworks_cwrapper/steam_wrapper.h>)
+ * Include steam_wrapper.h (should be #include \<steamworks_cwrapper/steam_wrapper.h>)
  * Take a look at steam_wrapper.h. Note two things: Everything's prepended with c_. So you'd call c_SteamAPI_Init() instead of SteamAPI_Init().
-    Second thing to note is that a class's member function is called by c_SomeClass_DoSomething(), instead of SomeClass::DoSomething().
+    Second thing to note is that a class's member function is called by c_SomeClass_DoSomething(), instead of SomeClass::DoSomething() or SomeClass_instance.DoSomething().
 
 
 General notes:
