@@ -313,3 +313,8 @@ extern "C" bool c_SteamUtils_IsAPICallCompleted(ulong hSteamAPICall, bool *pbFai
 {
 	return SteamUtils()->IsAPICallCompleted(hSteamAPICall, pbFailed);
 }
+
+extern "C" bool c_SteamUtils_GetAPICallResult(c_SteamAPICall_t hSteamAPICall, void* pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
+{
+	return SteamUtils()->GetAPICallResult(hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+}
