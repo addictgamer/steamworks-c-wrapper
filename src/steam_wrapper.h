@@ -246,4 +246,10 @@ bool c_SteamFriends_IsUserInSource(void *steamIDUser, void *steamIDSource);
 
 typedef uint64_t c_SteamAPICall_t;
 
+/*
+ * NOTE: This function calls new to hold the data SteamMatchmaking()->GetLobbyByIndex() returns.
+ * TODO: Does that data need to be explicitly deleted? I'd assume so. Need to write a wrapper to do that?
+ */
+extern "C" void* c_SteamMatchmaking_GetLobbyByIndex(int iLobby);
+
 #endif

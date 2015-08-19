@@ -290,3 +290,10 @@ extern "C" c_SteamAPICall_t c_SteamMatchmaking_RequestLobbyList()
 {
 	return SteamMatchmaking()->RequestLobbyList();
 }
+
+extern "C" void* c_SteamMatchmaking_GetLobbyByIndex(int iLobby)
+{
+	CSteamID *id = new CSteamID();
+	*id = SteamMatchmaking()->GetLobbyByIndex(iLobby);
+	return id;
+}
