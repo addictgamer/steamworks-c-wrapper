@@ -219,7 +219,7 @@ const char* c_SteamFriends_GetFriendPersonaName(void *steamIDLobbyMember);
  CSteamID steamIDUser;
  ...
  const char *data = SteamMatchmaking()->GetLobbyMemberData(steamIDLobby, steamIDLobbyMember, "whatever");
- * This is C, so pass a void pointer of the CSteamIDs you want to use to steamIDLobby and steamIDUser.
+ * This is C, so pass void pointers of the CSteamIDs you want to use to steamIDLobby and steamIDUser.
  */
 const char* c_SteamMatchmaking_GetLobbyMemberData(void *steamIDLobby, void *steamIDUser, const char *pchKey);
 
@@ -233,5 +233,15 @@ const char* c_SteamMatchmaking_GetLobbyMemberData(void *steamIDLobby, void *stea
  * TODO: Does that data need to be explicitly deleted? I'd assume so. Need to write a wrapper to do that?
  */
 void* c_SteamMatchmaking_GetLobbyOwner(void *steamIDLobby);
+
+/*
+ * NOTE: In C++, this would be used like so:
+ CSteamID steamIDUser;
+ CSteamID steamIDLobby;
+ ...
+ SteamFriends()->IsUserInSource(steamIDUser, steamIDLobby);
+ * This is C, so pass void pointers of the CSteamIDs you want to use to steamIDUser and steamIDSource.
+ */
+bool c_SteamFriends_IsUserInSource(void *steamIDUser, void *steamIDSource);
 
 #endif

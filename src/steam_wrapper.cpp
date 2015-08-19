@@ -280,3 +280,8 @@ extern "C" void* c_SteamMatchmaking_GetLobbyOwner(void *steamIDLobby)
 	*id = SteamMatchmaking()->GetLobbyOwner(*static_cast<CSteamID*>(steamIDLobby));
 	return id; //Still don't like this method.
 }
+
+extern "C" bool c_SteamFriends_IsUserInSource(void *steamIDUser, void *steamIDSource)
+{
+	return SteamFriends()->IsUserInSource(*static_cast<CSteamID*>(steamIDUser), *static_cast<CSteamID*>(steamIDSource));
+}
