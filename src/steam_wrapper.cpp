@@ -378,3 +378,9 @@ extern "C" bool c_SteamMatchmaking_SendLobbyChatMsg(void *steamIDLobby, const vo
 {
 	return SteamMatchmaking()->SendLobbyChatMsg(*static_cast<CSteamID*>(steamIDLobby), pvMsgBody, cubMsgBody);
 }
+
+//int GetLobbyChatEntry( CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, EChatEntryType *peChatEntryType )
+extern "C" int c_SteamMatchmaking_GetLobbyChatEntry(void *steamIDLobby, int iChatID, void *pSteamIDUser, void *pvData, int cubData, c_EChatEntryType *peChatEntryType)
+{
+	return SteamMatchmaking()->GetLobbyChatEntry(*static_cast<CSteamID*>(steamIDLobby), iChatID, static_cast<CSteamID*>(pSteamIDUser), pvData, cubData, reinterpret_cast<EChatEntryType*>(peChatEntryType));
+}

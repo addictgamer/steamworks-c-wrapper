@@ -342,4 +342,27 @@ bool c_SteamMatchmaking_GetLobbyDataByIndex(void *steamIDLobby, int iLobbyData, 
  */
 bool c_SteamMatchmaking_SendLobbyChatMsg(void *steamIDLobby, const void *pvMsgBody, int cubMsgBody);
 
+typedef enum c_EChatEntryType_t
+{
+	c_k_EChatEntryTypeInvalid = 0,
+	c_k_EChatEntryTypeChatMsg = 1,
+	c_k_EChatEntryTypeTyping = 2,
+	c_k_EChatEntryTypeInviteGame = 3,
+	c_k_EChatEntryTypeEmote = 4,
+	c_k_EChatEntryTypeLeftConversation = 6,
+	c_k_EChatEntryTypeEntered = 7,
+	c_k_EChatEntryTypeWasKicked = 8,
+	c_k_EChatEntryTypeWasBanned = 9,
+	c_k_EChatEntryTypeDisconnected = 10,
+	c_k_EChatEntryTypeHistoricalChat = 11,
+	c_k_EChatEntryTypeReserved1 = 12,
+	c_k_EChatEntryTypeReserved2 = 13,
+	c_k_EChatEntryTypeLinkBlocked = 14,
+} c_EChatEntryType;
+
+/*
+ * NOTE: This is C, so pass void pointers to the CSteamIDs you want to use for steamIDLobby and pSteamIDUser.
+ */
+int c_SteamMatchmaking_GetLobbyChatEntry(void *steamIDLobby, int iChatID, void *pSteamIDUser, void *pvData, int cubData, c_EChatEntryType *peChatEntryType);
+
 #endif
