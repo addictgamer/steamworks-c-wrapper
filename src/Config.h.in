@@ -1,0 +1,3 @@
+#if @Windows@
+	typedef unsigned long ulong;
+#endif
