@@ -337,4 +337,9 @@ int c_SteamMatchmaking_GetLobbyDataCount(void *steamIDLobby);
  */
 bool c_SteamMatchmaking_GetLobbyDataByIndex(void *steamIDLobby, int iLobbyData, char *pchKey, int cchKeyBufferSize, char *pchValue, int cchValueBufferSize);
 
+/*
+ * NOTE: This is C, so pass a void pointer to the CSteamID you want to use for steamIDLobby.
+ */
+bool c_SteamMatchmaking_SendLobbyChatMsg(void *steamIDLobby, const void *pvMsgBody, int cubMsgBody);
+
 #endif

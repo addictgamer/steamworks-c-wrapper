@@ -373,3 +373,8 @@ extern "C" bool c_SteamMatchmaking_GetLobbyDataByIndex(void *steamIDLobby, int i
 {
 	return SteamMatchmaking()->GetLobbyDataByIndex(*static_cast<CSteamID*>(steamIDLobby), iLobbyData, pchKey, cchKeyBufferSize, pchValue, cchValueBufferSize);
 }
+
+extern "C" bool c_SteamMatchmaking_SendLobbyChatMsg(void *steamIDLobby, const void *pvMsgBody, int cubMsgBody)
+{
+	return SteamMatchmaking()->SendLobbyChatMsg(*static_cast<CSteamID*>(steamIDLobby), pvMsgBody, cubMsgBody);
+}
