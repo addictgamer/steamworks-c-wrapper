@@ -367,4 +367,6 @@ int c_SteamMatchmaking_GetLobbyChatEntry(void *steamIDLobby, int iChatID, void *
 
 bool c_SteamFriends_SetRichPresence(const char *pchKey, const char *pchValue);
 
+int c_SteamFriends_GetFriendCount(int iFriendFlags);
+
 #endif

@@ -390,3 +390,8 @@ extern "C" bool c_SteamFriends_SetRichPresence(const char *pchKey, const char *p
 {
 	return SteamFriends()->SetRichPresence(pchKey, pchValue);
 }
+
+extern "C" int c_SteamFriends_GetFriendCount(int iFriendFlags)
+{
+	return SteamFriends()->GetFriendCount(iFriendFlags);
+}
