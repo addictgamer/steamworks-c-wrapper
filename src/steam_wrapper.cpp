@@ -5,6 +5,8 @@
 
 #include <string>
 
+#include "Config.h"
+
 extern "C"
 {
 	#include "steam_wrapper.h"
@@ -379,8 +381,12 @@ extern "C" bool c_SteamMatchmaking_SendLobbyChatMsg(void *steamIDLobby, const vo
 	return SteamMatchmaking()->SendLobbyChatMsg(*static_cast<CSteamID*>(steamIDLobby), pvMsgBody, cubMsgBody);
 }
 
-//int GetLobbyChatEntry( CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, EChatEntryType *peChatEntryType )
 extern "C" int c_SteamMatchmaking_GetLobbyChatEntry(void *steamIDLobby, int iChatID, void *pSteamIDUser, void *pvData, int cubData, c_EChatEntryType *peChatEntryType)
 {
 	return SteamMatchmaking()->GetLobbyChatEntry(*static_cast<CSteamID*>(steamIDLobby), iChatID, static_cast<CSteamID*>(pSteamIDUser), pvData, cubData, reinterpret_cast<EChatEntryType*>(peChatEntryType));
+}
+
+extern "C" bool c_SteamFriends_SetRichPresence(const char *pchKey, const char *pchValue)
+{
+	return SteamFriends()->SetRichPresence(pchKey, pchValue);
 }

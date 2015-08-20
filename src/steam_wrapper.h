@@ -365,4 +365,6 @@ typedef enum c_EChatEntryType_t
  */
 int c_SteamMatchmaking_GetLobbyChatEntry(void *steamIDLobby, int iChatID, void *pSteamIDUser, void *pvData, int cubData, c_EChatEntryType *peChatEntryType);
 
+bool c_SteamFriends_SetRichPresence(const char *pchKey, const char *pchValue);
+
 #endif
