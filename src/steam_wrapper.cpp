@@ -193,6 +193,12 @@ extern "C" void* c_SteamUser_GetSteamID()
 	return id; //Still don't like this method.
 }
 
+extern "C" void c_Free_CSteamID(void *steamID)
+{
+	CSteamID *id = static_cast<CSteamID*>(steamID);
+	delete id;
+}
+
 extern "C" bool c_SteamUserStats()
 {
 	if (SteamUserStats())
@@ -394,4 +400,31 @@ extern "C" bool c_SteamFriends_SetRichPresence(const char *pchKey, const char *p
 extern "C" int c_SteamFriends_GetFriendCount(int iFriendFlags)
 {
 	return SteamFriends()->GetFriendCount(iFriendFlags);
+}
+
+extern "C" bool c_SteamMatchmaking_InviteUserToLobby(void *steamIDLobby, void *steamIDInvitee)
+{
+	return SteamMatchmaking()->InviteUserToLobby(*static_cast<CSteamID*>(steamIDLobby), *static_cast<CSteamID*>(steamIDInvitee));
+}
+
+extern "C" void c_SteamFriends_ActivateGameOverlay(const char *pchDialog)
+{
+	SteamFriends()->ActivateGameOverlay(pchDialog);
+}
+
+extern "C" void c_SteamMatchmaking_LeaveLobby(void *steamIDLobby)
+{
+	SteamMatchmaking()->LeaveLobby(*static_cast<CSteamID*>(steamIDLobby));
+}
+
+extern "C" bool c_SteamFriends_GetFriendGamePlayed(void *steamIDFriend, void *pFriendGameInfo)
+{
+	return SteamFriends()->GetFriendGamePlayed(*static_cast<CSteamID*>(steamIDFriend), static_cast<FriendGameInfo_t*>(pFriendGameInfo));
+}
+
+extern "C" void* c_FriendGameInfo_t_m_steamIDLobby(void *FriendGameInfo_t_instance)
+{
+	CSteamID *id = new CSteamID;
+	*id = static_cast<FriendGameInfo_t*>(FriendGameInfo_t_instance)->m_steamIDLobby;
+	return id;
 }

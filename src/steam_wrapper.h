@@ -144,9 +144,11 @@ bool c_SteamUser();
 
 /*
  * Note that this function calls new to hold the data SteamUser()->GetSteamID() returns.
- * TODO: Does that data need to be explicitly deleted? I'd assume so. Need to write a wrapper to do that?
+ * NOTE: This function allocates data. Call c_Free_CSteamID() on the pointer returned by this function when you're done using it to free the memory.
  */
 void* c_SteamUser_GetSteamID();
+
+void c_Free_CSteamID(void *steamID);
 
 /*
  * NOTE: The steam api returns a pointer to ISteamUserStats. Since C can't see classes, this function returns false if SteamUserStats() returns NULL, true otherwise (useful for checking if steam was initialized, for example).
@@ -200,7 +202,7 @@ int c_SteamMatchmaking_GetNumLobbyMembers(void *steamIDLobby);
  CSteamID steamIDLobbyMember = SteamMatchmaking()->GetLobbyMemberByIndex(steamIDLobby, index);
  * This is C, so pass a void pointer to the CSteamID you want to use.
  * Note that this function calls new to hold the data SteamMatchmaking()->GetLobbyMemberByIndex() returns.
- * TODO: Does that data need to be explicitly deleted? I'd assume so. Need to write a wrapper to do that?
+ * NOTE: This function allocates data. Call c_Free_CSteamID() on the pointer returned by this function when you're done using it to free the memory.
  */
 void* c_SteamMatchmaking_GetLobbyMemberByIndex(void *steamIDLobby, int iMember);
 
@@ -250,7 +252,7 @@ c_SteamAPICall_t c_SteamMatchmaking_RequestLobbyList();
 
 /*
  * NOTE: This function calls new to hold the data SteamMatchmaking()->GetLobbyByIndex() returns.
- * TODO: Does that data need to be explicitly deleted? I'd assume so. Need to write a wrapper to do that?
+ * NOTE: This function allocates data. Call c_Free_CSteamID() on the pointer returned by this function when you're done using it to free the memory.
  */
 void* c_SteamMatchmaking_GetLobbyByIndex(int iLobby);
 
@@ -368,5 +370,45 @@ int c_SteamMatchmaking_GetLobbyChatEntry(void *steamIDLobby, int iChatID, void *
 bool c_SteamFriends_SetRichPresence(const char *pchKey, const char *pchValue);
 
 int c_SteamFriends_GetFriendCount(int iFriendFlags);
+
+/*
+ * NOTE: This is C, so pass void pointers to the CSteamIDs you want to use for steamIDLobby and steamIDInvitee.
+ */
+bool c_SteamMatchmaking_InviteUserToLobby(void *steamIDLobby, void *steamIDInvitee);
+
+void c_SteamFriends_ActivateGameOverlay(const char *pchDialog);
+
+/*
+ * NOTE: This is C, so pass a void pointer to the CSteamID you want to use for steamIDLobby.
+ */
+void c_SteamMatchmaking_LeaveLobby(void *steamIDLobby);
+
+typedef enum c_EFriendFlags_t
+{
+	c_k_EFriendFlagNone = 0x00,
+	c_k_EFriendFlagBlocked = 0x01,
+	c_k_EFriendFlagFriendshipRequested = 0x02,
+	c_k_EFriendFlagImmediate = 0x04,
+	c_k_EFriendFlagClanMember = 0x08,
+	c_k_EFriendFlagOnGameServer = 0x10,
+	c_k_EFriendFlagRequestingFriendship = 0x80,
+	c_k_EFriendFlagRequestingInfo = 0x100,
+	c_k_EFriendFlagIgnored = 0x200,
+	c_k_EFriendFlagIgnoredFriend = 0x400,
+	c_k_EFriendFlagSuggested = 0x800,
+	c_k_EFriendFlagAll = 0xFFFF,
+} c_EFriendFlags;
+
+/*
+ * NOTE: This is C, so pass a void pointer to the CSteamID you want to use for steamIDFriend and a void pointer to the FriendGameInfo_t you want to use for pFriendGameInfo.
+ */
+bool c_SteamFriends_GetFriendGamePlayed(void *steamIDFriend, void *pFriendGameInfo);
+
+/*
+ * Returns the CSteamID data member m_steamIDLobby of FriendGameInfo_t.
+ * NOTE: This is C, so pass a void pointer to the FriendGameInfo_t you want to use for FriendGameInfo_t_instance.
+ * NOTE: This function allocates data. Call c_Free_CSteamID() on the pointer returned by this function when you're done using it to free the memory.
+ */
+void* c_FriendGameInfo_t_m_steamIDLobby(void *FriendGameInfo_t_instance);
 
 #endif
