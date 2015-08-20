@@ -363,3 +363,13 @@ extern "C" bool c_SteamMatchmaking_DeleteLobbyData(void *steamIDLobby, const cha
 {
 	return SteamMatchmaking()->DeleteLobbyData(*static_cast<CSteamID*>(steamIDLobby), pchKey);
 }
+
+extern "C" int c_SteamMatchmaking_GetLobbyDataCount(void *steamIDLobby)
+{
+	return SteamMatchmaking()->GetLobbyDataCount(*static_cast<CSteamID*>(steamIDLobby));
+}
+
+extern "C" bool c_SteamMatchmaking_GetLobbyDataByIndex(void *steamIDLobby, int iLobbyData, char *pchKey, int cchKeyBufferSize, char *pchValue, int cchValueBufferSize)
+{
+	return SteamMatchmaking()->GetLobbyDataByIndex(*static_cast<CSteamID*>(steamIDLobby), iLobbyData, pchKey, cchKeyBufferSize, pchValue, cchValueBufferSize);
+}

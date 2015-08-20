@@ -327,4 +327,14 @@ bool c_SteamMatchmaking_SetLobbyData(void *steamIDLobby, const char *pchKey, con
  */
 bool c_SteamMatchmaking_DeleteLobbyData(void *steamIDLobby, const char *pchKey);
 
+/*
+ * NOTE: This is C, so pass a void pointer to the CSteamID you want to use for steamIDLobby.
+ */
+int c_SteamMatchmaking_GetLobbyDataCount(void *steamIDLobby);
+
+/*
+ * NOTE: This is C, so pass a void pointer to the CSteamID you want to use for steamIDLobby.
+ */
+bool c_SteamMatchmaking_GetLobbyDataByIndex(void *steamIDLobby, int iLobbyData, char *pchKey, int cchKeyBufferSize, char *pchValue, int cchValueBufferSize);
+
 #endif
