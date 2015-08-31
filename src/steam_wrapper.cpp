@@ -199,6 +199,12 @@ extern "C" void c_Free_CSteamID(void *steamID)
 	delete id;
 }
 
+extern "C" void* c_AllocateNew_CSteamID()
+{
+	CSteamID *id = new CSteamID();
+	return id;
+}
+
 extern "C" bool c_SteamUserStats()
 {
 	if (SteamUserStats())

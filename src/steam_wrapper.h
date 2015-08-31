@@ -150,6 +150,8 @@ void* c_SteamUser_GetSteamID();
 
 void c_Free_CSteamID(void *steamID);
 
+void* c_AllocateNew_CSteamID();
+
 /*
  * NOTE: The steam api returns a pointer to ISteamUserStats. Since C can't see classes, this function returns false if SteamUserStats() returns NULL, true otherwise (useful for checking if steam was initialized, for example).
  */
