@@ -434,3 +434,10 @@ extern "C" void* c_FriendGameInfo_t_m_steamIDLobby(void *FriendGameInfo_t_instan
 	*id = static_cast<FriendGameInfo_t*>(FriendGameInfo_t_instance)->m_steamIDLobby;
 	return id;
 }
+
+extern "C" void* c_P2PSessionRequest_t_m_steamIDRemote(void *P2PSessionRequest_t_instance)
+{
+	CSteamID *id = new CSteamID;
+	*id = static_cast<P2PSessionRequest_t*>(P2PSessionRequest_t_instance)->m_steamIDRemote;
+	return id;
+}

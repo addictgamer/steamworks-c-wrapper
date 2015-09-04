@@ -413,4 +413,11 @@ bool c_SteamFriends_GetFriendGamePlayed(void *steamIDFriend, void *pFriendGameIn
  */
 void* c_FriendGameInfo_t_m_steamIDLobby(void *FriendGameInfo_t_instance);
 
+/*
+ * Takes a void pointer to the P2PSessionRequest_t you want to extract m_steamIDRemote from and returns a void pointer to m_steamIDRemote.
+ * NOTE: This is C, so pass a void pointer to the P2PSessionRequest_t you want to use for P2PSessionREquest_t_instance.
+ * NOTE: This function allocates data. Call c_Free_CSteamID() on the pointer returned by this function when you're done using it to free the memory.
+ */
+void* c_P2PSessionRequest_t_m_steamIDRemote(void *P2PSessionRequest_t_instance);
+
 #endif
