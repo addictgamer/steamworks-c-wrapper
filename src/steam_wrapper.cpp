@@ -447,7 +447,7 @@ class SteamServerWrapper
 public:
 	SteamServerWrapper() : m_CallbackP2PSessionRequest(this, &SteamServerWrapper::OnP2PSessionRequest)
 	{
-		//TODO:
+		//Stuff.
 	}
 
 	STEAM_GAMESERVER_CALLBACK(SteamServerWrapper, OnP2PSessionRequest, P2PSessionRequest_t, m_CallbackP2PSessionRequest);
@@ -459,12 +459,12 @@ void SteamServerWrapper::OnP2PSessionRequest(P2PSessionRequest_t *pCallback)
 		(*c_SteamServerWrapper_OnP2PSessionRequest)(pCallback);
 }
 
-void c_SteamServerWrapper_Instantiate()
+extern "C" void c_SteamServerWrapper_Instantiate()
 {
 	steam_server_wrapper = new SteamServerWrapper();
 }
 
-void c_SteamServerWrapper_Destroy()
+extern "C" void c_SteamServerWrapper_Destroy()
 {
 	delete steam_server_wrapper;
 	steam_server_wrapper = nullptr;
