@@ -506,14 +506,18 @@ enum { c_k_cchMaxRichPresenceValueLength = 256 };
 /*
  * Takes a void pointer to the GameRichPresenceJoinRequested_t you want to extract m_rgchConnect from.
  * The char array returned is of size c_k_cchMaxRichPresenceValueLength.
- * NOTE: This is C, so pass a void pointer to the GameRichPresenceJoinRequested_t you want to use for GameRichPresenceJoinRequested_t_instance.
  * NOTE: You are responsible for freeing the char array returned by this function.
  */
 char* c_GameRichPresenceJoinRequested_t_m_rgchConnect(void *GameRichPresenceJoinRequested_t_instance);
 
 /*
- * NOTE: steamIDLobby should be a CSteamID pointer.
+ * steamIDLobby should be a CSteamID pointer.
  */
 void c_SteamFriends_ActivateGameOverlayInviteDialog(void *steamIDLobby);
+
+/*
+ * GameOverlayActivated_t_instance is a pointer to a GameOverlayActivated_t
+ */
+uint8_t c_GameOverlayActivated_t_m_bActive(void *GameOverlayActivated_t_instance);
 
 #endif

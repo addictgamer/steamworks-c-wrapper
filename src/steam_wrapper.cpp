@@ -654,3 +654,8 @@ extern "C" void c_SteamFriends_ActivateGameOverlayInviteDialog(void *steamIDLobb
 {
 	SteamFriends()->ActivateGameOverlayInviteDialog(*static_cast<CSteamID*>(steamIDLobby));
 }
+
+extern "C" uint8_t c_GameOverlayActivated_t_m_bActive(void *GameOverlayActivated_t_instance)
+{
+	return static_cast<GameOverlayActivated_t*>(GameOverlayActivated_t_instance)->m_bActive;
+}
