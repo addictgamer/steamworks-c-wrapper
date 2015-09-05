@@ -323,7 +323,7 @@ extern "C" c_AccountID_t c_CSteamID_GetAccountID(void *CSteamID_instance)
 	return static_cast<CSteamID*>(CSteamID_instance)->GetAccountID();
 }
 
-extern "C" bool c_SteamUtils_IsAPICallCompleted(ulong hSteamAPICall, bool *pbFailed)
+extern "C" bool c_SteamUtils_IsAPICallCompleted(unsigned long hSteamAPICall, bool *pbFailed)
 {
 	return SteamUtils()->IsAPICallCompleted(hSteamAPICall, pbFailed);
 }

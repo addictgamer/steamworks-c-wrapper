@@ -281,7 +281,7 @@ typedef uint32_t c_AccountID_t;
 //steamIDLobby.GetAccountID()
 c_AccountID_t c_CSteamID_GetAccountID(void *CSteamID_instance);
 
-bool c_SteamUtils_IsAPICallCompleted(ulong hSteamAPICall, bool *pbFailed);
+bool c_SteamUtils_IsAPICallCompleted(unsigned long hSteamAPICall, bool *pbFailed);
 
 bool c_SteamUtils_GetAPICallResult(c_SteamAPICall_t hSteamAPICall, void* pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed);
 
