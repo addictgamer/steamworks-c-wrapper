@@ -420,4 +420,17 @@ void* c_FriendGameInfo_t_m_steamIDLobby(void *FriendGameInfo_t_instance);
  */
 void* c_P2PSessionRequest_t_m_steamIDRemote(void *P2PSessionRequest_t_instance);
 
+/*
+ * Function pointer to handle the steam callback for OnP2PSessionRequest.
+ * NOTE: You'll have to implement this yourself. But first, call c_SteamServerWrapper_Instantiate().
+ */
+void (*c_SteamServerWrapper_OnP2PSessionRequest)(void* p_Callback);
+
+/*
+ * NOTE: Call c_SteamServerWrapper_Destroy() when your program exits to free the memory.
+ */
+void c_SteamServerWrapper_Instantiate();
+
+void c_SteamServerWrapper_Destroy();
+
 #endif

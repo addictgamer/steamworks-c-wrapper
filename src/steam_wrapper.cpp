@@ -441,3 +441,31 @@ extern "C" void* c_P2PSessionRequest_t_m_steamIDRemote(void *P2PSessionRequest_t
 	*id = static_cast<P2PSessionRequest_t*>(P2PSessionRequest_t_instance)->m_steamIDRemote;
 	return id;
 }
+
+class SteamServerWrapper
+{
+public:
+	SteamServerWrapper() : m_CallbackP2PSessionRequest(this, &SteamServerWrapper::OnP2PSessionRequest)
+	{
+		//TODO:
+	}
+
+	STEAM_GAMESERVER_CALLBACK(SteamServerWrapper, OnP2PSessionRequest, P2PSessionRequest_t, m_CallbackP2PSessionRequest);
+} *steam_server_wrapper;
+
+void SteamServerWrapper::OnP2PSessionRequest(P2PSessionRequest_t *pCallback)
+{
+	if (c_SteamServerWrapper_OnP2PSessionRequest)
+		(*c_SteamServerWrapper_OnP2PSessionRequest)(pCallback);
+}
+
+void c_SteamServerWrapper_Instantiate()
+{
+	steam_server_wrapper = new SteamServerWrapper();
+}
+
+void c_SteamServerWrapper_Destroy()
+{
+	delete steam_server_wrapper;
+	steam_server_wrapper = nullptr;
+}
