@@ -236,8 +236,7 @@ const char* c_SteamMatchmaking_GetLobbyMemberData(void *steamIDLobby, void *stea
  ...
  CSteamID id = SteamMatchmaking()->GetLobbyOwner(steamIDLobby);
  * This is C, so pass a void pointer of the CSteamID you want to use to steamIDLobby.
- * Note that this function calls new to hold the data SteamMatchmaking()->GetLobbyOwner() returns.
- * TODO: Does that data need to be explicitly deleted? I'd assume so. Need to write a wrapper to do that?
+ * NOTE: Call c_Free_CSteamID() on the void pointer returned by this when done with it.
  */
 void* c_SteamMatchmaking_GetLobbyOwner(void *steamIDLobby);
 
@@ -435,7 +434,7 @@ void (*c_SteamServerWrapper_OnPolicyResponse)(void *pPolicyResponse);
 void (*c_SteamServerWrapper_OnValidateAuthTicketResponse)(void *pResponse);
 
 /*
- * NOTE: Call c_SteamServerWrapper_Destroy() when your program exits to free the memory.
+ * NOTE: Call c_SteamServerWrapper_Destroy() when you're done using this to free the memory.
  */
 void c_SteamServerWrapper_Instantiate();
 
@@ -474,5 +473,47 @@ c_EAuthSessionResponse c_ValidateAuthTicketResponse_t_EAuthSessionResponse(void 
  * NOTE: This function allocates data. Call c_Free_CSteamID() on the pointer returned by this function when you're done using it to free the memory.
  */
 void* c_ValidateAuthTicketResponse_t_m_SteamID(void *ValidateAuthTicketResponse_t_instance);
+
+/*
+ * Function Pointers to handle steam callbacks.
+ * NOTE: You'll have to implement these yourself. But first, call c_SteamServerClientWrapper_Instantiate().
+ */
+void (*c_SteamServerClientWrapper_OnP2PSessionConnectFail)(void *pCallback);
+void (*c_SteamServerClientWrapper_OnLobbyGameCreated)(void *pCallback);
+void (*c_SteamServerClientWrapper_OnIPCFailure)(void *failure);
+void (*c_SteamServerClientWrapper_OnSteamShutdown)(void *callback);
+void (*c_SteamServerClientWrapper_OnSteamServersConnected)(void *callback);
+void (*c_SteamServerClientWrapper_OnSteamServersDisconnected)(void *callback);
+void (*c_SteamServerClientWrapper_OnSteamServerConnectFailure)(void *callback);
+void (*c_SteamServerClientWrapper_OnGameJoinRequested)(void *pCallback);
+void (*c_SteamServerClientWrapper_OnGameOverlayActivated)(void *callback);
+
+/*
+ * NOTE: Call c_SteamServerClientWrapper_Destroy() when you're done using this to free to memory.
+ */
+void c_SteamServerClientWrapper_Instantiate();
+
+void c_SteamServerClientWrapper_Destroy();
+
+/*
+ * Takes a void pointer to the LobbyGameCreated_t you want to extract m_ulSteamIDGameServer from.
+ * NOTE: This is C, so pass a void pointer to the LobbyGameCreated_t you want to use for LobbyGameCreated_t_instance.
+ */
+uint64_t c_LobbyGameCreated_t_m_ulSteamIDGameServer(void *LobbyGameCreated_t_instance);
+
+enum { c_k_cchMaxRichPresenceValueLength = 256 };
+
+/*
+ * Takes a void pointer to the GameRichPresenceJoinRequested_t you want to extract m_rgchConnect from.
+ * The char array returned is of size c_k_cchMaxRichPresenceValueLength.
+ * NOTE: This is C, so pass a void pointer to the GameRichPresenceJoinRequested_t you want to use for GameRichPresenceJoinRequested_t_instance.
+ * NOTE: You are responsible for freeing the char array returned by this function.
+ */
+char* c_GameRichPresenceJoinRequested_t_m_rgchConnect(void *GameRichPresenceJoinRequested_t_instance);
+
+/*
+ * NOTE: steamIDLobby should be a CSteamID pointer.
+ */
+void c_SteamFriends_ActivateGameOverlayInviteDialog(void *steamIDLobby);
 
 #endif
