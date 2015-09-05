@@ -150,6 +150,9 @@ void* c_SteamUser_GetSteamID();
 
 void c_Free_CSteamID(void *steamID);
 
+/*
+ * NOTE: This function allocates data. Call c_Free_CSteamID() on the pointer returned by this function when you're done using it to free the memory.
+ */
 void* c_AllocateNew_CSteamID();
 
 /*
@@ -415,16 +418,21 @@ void* c_FriendGameInfo_t_m_steamIDLobby(void *FriendGameInfo_t_instance);
 
 /*
  * Takes a void pointer to the P2PSessionRequest_t you want to extract m_steamIDRemote from and returns a void pointer to m_steamIDRemote.
- * NOTE: This is C, so pass a void pointer to the P2PSessionRequest_t you want to use for P2PSessionREquest_t_instance.
+ * NOTE: This is C, so pass a void pointer to the P2PSessionRequest_t you want to use for P2PSessionRequest_t_instance.
  * NOTE: This function allocates data. Call c_Free_CSteamID() on the pointer returned by this function when you're done using it to free the memory.
  */
 void* c_P2PSessionRequest_t_m_steamIDRemote(void *P2PSessionRequest_t_instance);
 
 /*
- * Function pointer to handle the steam callback for OnP2PSessionRequest.
- * NOTE: You'll have to implement this yourself. But first, call c_SteamServerWrapper_Instantiate().
+ * Function pointers to handle steam callbacks.
+ * NOTE: You'll have to implement these yourself. But first, call c_SteamServerWrapper_Instantiate().
  */
-void (*c_SteamServerWrapper_OnP2PSessionRequest)(void* p_Callback);
+void (*c_SteamServerWrapper_OnP2PSessionRequest)(void *p_Callback);
+void (*c_SteamServerWrapper_OnP2PSessionConnectFail)(void *pCallback);
+void (*c_SteamServerWrapper_OnSteamServersConnected)(void *pLogonSuccess);
+void (*c_SteamServerWrapper_OnSteamServersDisconnected)(void *pLoggedOff);
+void (*c_SteamServerWrapper_OnPolicyResponse)(void *pPolicyResponse);
+void (*c_SteamServerWrapper_OnValidateAuthTicketResponse)(void *pResponse);
 
 /*
  * NOTE: Call c_SteamServerWrapper_Destroy() when your program exits to free the memory.
@@ -432,5 +440,39 @@ void (*c_SteamServerWrapper_OnP2PSessionRequest)(void* p_Callback);
 void c_SteamServerWrapper_Instantiate();
 
 void c_SteamServerWrapper_Destroy();
+
+/*
+ * Takes a void pointer to the P2PSessionConnectFail_t you want to extract m_steamIDRemote from and returns a void pointer to m_steamIDRemote.
+ * NOTE: This is C, so pass a void pointer to the P2PSessionConnectFail_t you want to use for P2PSessionConnectFail_t_instance.
+ * NOTE: This function allocates data. Call c_Free_CSteamID() on the pointer returned by this function when you're done using it to free the memory.
+ */
+void* c_P2PSessionConnectFail_t_m_steamIDRemote(void *P2PSessionConnectFail_t_instance);
+
+typedef enum c_EAuthSessionResponse_t
+{
+	c_k_EAuthSessionResponseOK = 0,
+	c_k_EAuthSessionResponseUserNotConnectedToSteam = 1,
+	c_k_EAuthSessionResponseNoLicenseOrExpired = 2,
+	c_k_EAuthSessionResponseVACBanned = 3,
+	c_k_EAuthSessionResponseLoggedInElseWhere = 4,
+	c_k_EAuthSessionResponseVACCheckTimedOut = 5,
+	c_k_EAuthSessionResponseAuthTicketCanceled = 6,
+	c_k_EAuthSessionResponseAuthTicketInvalidAlreadyUsed = 7,
+	c_k_EAuthSessionResponseAuthTicketInvalid = 8,
+	c_k_EAuthSessionResponsePublisherIssuedBan = 9,
+} c_EAuthSessionResponse;
+
+/*
+ * Takes a void pointer to the ValidateAuthTicketResponse_t you want to extract EAuthSessionResponse from.
+ * NOTE: This is C, so pass a void pointer to the ValidateAuthTicketResponse_t you want to use for ValidateAuthTicketResponse_t_instance.
+ */
+c_EAuthSessionResponse c_ValidateAuthTicketResponse_t_EAuthSessionResponse(void *ValidateAuthTicketResponse_t_instance);
+
+/*
+ * Takes a void pointer to the ValidateAuthTicketResponse_t you want to extract m_SteamID from and returns a void pointer to m_SteamID.
+ * NOTE: This is C, so pass a void pointer to the ValidateAuthTicketResponse_t you want to use for ValidateAuthTicketResponse_t_instance.
+ * NOTE: This function allocates data. Call c_Free_CSteamID() on the pointer returned by this function when you're done using it to free the memory.
+ */
+void* c_ValidateAuthTicketResponse_t_m_SteamID(void *ValidateAuthTicketResponse_t_instance);
 
 #endif

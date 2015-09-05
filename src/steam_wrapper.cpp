@@ -442,21 +442,79 @@ extern "C" void* c_P2PSessionRequest_t_m_steamIDRemote(void *P2PSessionRequest_t
 	return id;
 }
 
+//TODO: Client wrapper functions needed:
+//STEAM_GAMESERVER_CALLBACK(SteamServerWrapper, OnP2PSessionConnectFail, P2PSessionConnectFail_t, m_CallbackP2PSessionConnectFail);
+//STEAM_GAMESERVER_CALLBACK(SteamServerWrapper, OnLobbyGameCreated, LobbyGameCreated_t, m_LobbyGameCreated);
+//STEAM_GAMESERVER_CALLBACK(SteamServerWrapper, OnIPCFailure, IPCFailure_t, m_IPCFailureCallback);
+//STEAM_GAMESERVER_CALLBACK(SteamServerWrapper, OnSteamShutdown, SteamShutdown_t, m_SteamShutdownCallback);
+//STEAM_GAMESERVER_CALLBACK(SteamServerWrapper, OnSteamServersConnected, SteamServersConnected_t, m_SteamServersConnected);
+//STEAM_GAMESERVER_CALLBACK(SteamServerWrapper, OnSteamServersDisconnected, SteamServersDisconnected_t, m_SteamServersDisconnected);
+//STEAM_GAMESERVER_CALLBACK(SteamServerWrapper, OnSteamServerConnectFailure, SteamServerConnectFailure_t, m_SteamServerConnectFailure);
+//STEAM_GAMESERVER_CALLBACK(SteamServerWrapper, OnGameJoinRequested, GameRichPresenceJoinRequested_t, m_GameJoinRequested);
+//STEAM_GAMESERVER_CALLBACK(SteamServerWrapper, OnGameOverlayActivated, GameOverlayActivated_t, m_CallbackGameOverlayActivated);
+
 class SteamServerWrapper
 {
 public:
-	SteamServerWrapper() : m_CallbackP2PSessionRequest(this, &SteamServerWrapper::OnP2PSessionRequest)
+	SteamServerWrapper()
+	:
+	m_CallbackP2PSessionRequest(this, &SteamServerWrapper::OnP2PSessionRequest),
+	m_CallbackP2PSessionConnectFail(this, &SteamServerWrapper::OnP2PSessionConnectFail),
+	m_SteamServersConnected(this, &SteamServerWrapper::OnSteamServersConnected),
+	m_SteamServersDisconnected(this, &SteamServerWrapper::OnSteamServersDisconnected),
+	m_CallbackPolicyResponse(this, &SteamServerWrapper::OnPolicyResponse),
+	m_CallbackGSAuthTicketResponse(this, &SteamServerWrapper::OnValidateAuthTicketResponse)
 	{
 		//Stuff.
 	}
 
 	STEAM_GAMESERVER_CALLBACK(SteamServerWrapper, OnP2PSessionRequest, P2PSessionRequest_t, m_CallbackP2PSessionRequest);
+
+	STEAM_GAMESERVER_CALLBACK(SteamServerWrapper, OnP2PSessionConnectFail, P2PSessionConnectFail_t, m_CallbackP2PSessionConnectFail);
+
+	STEAM_GAMESERVER_CALLBACK(SteamServerWrapper, OnSteamServersConnected, SteamServersConnected_t, m_SteamServersConnected);
+
+	STEAM_GAMESERVER_CALLBACK(SteamServerWrapper, OnSteamServersDisconnected, SteamServersDisconnected_t, m_SteamServersDisconnected);
+
+	STEAM_GAMESERVER_CALLBACK(SteamServerWrapper, OnPolicyResponse, GSPolicyResponse_t, m_CallbackPolicyResponse);
+
+	STEAM_GAMESERVER_CALLBACK(SteamServerWrapper, OnValidateAuthTicketResponse, ValidateAuthTicketResponse_t, m_CallbackGSAuthTicketResponse);
 } *steam_server_wrapper;
 
 void SteamServerWrapper::OnP2PSessionRequest(P2PSessionRequest_t *pCallback)
 {
 	if (c_SteamServerWrapper_OnP2PSessionRequest)
 		(*c_SteamServerWrapper_OnP2PSessionRequest)(pCallback);
+}
+
+void SteamServerWrapper::OnP2PSessionConnectFail(P2PSessionConnectFail_t *pCallback)
+{
+	if (c_SteamServerWrapper_OnP2PSessionConnectFail)
+		(*c_SteamServerWrapper_OnP2PSessionConnectFail)(pCallback);
+}
+
+void SteamServerWrapper::OnSteamServersConnected(SteamServersConnected_t *pLogonSuccess)
+{
+	if (c_SteamServerWrapper_OnSteamServersConnected)
+		(*c_SteamServerWrapper_OnSteamServersConnected)(pLogonSuccess);
+}
+
+void SteamServerWrapper::OnSteamServersDisconnected(SteamServersDisconnected_t *pLoggedOff)
+{
+	if (c_SteamServerWrapper_OnSteamServersDisconnected)
+		(*c_SteamServerWrapper_OnSteamServersDisconnected)(pLoggedOff);
+}
+
+void SteamServerWrapper::OnPolicyResponse(GSPolicyResponse_t *pPolicyResponse)
+{
+	if (c_SteamServerWrapper_OnPolicyResponse)
+		(*c_SteamServerWrapper_OnPolicyResponse)(pPolicyResponse);
+}
+
+void SteamServerWrapper::OnValidateAuthTicketResponse(ValidateAuthTicketResponse_t *pResponse)
+{
+	if (c_SteamServerWrapper_OnValidateAuthTicketResponse)
+		(*c_SteamServerWrapper_OnValidateAuthTicketResponse)(pResponse);
 }
 
 extern "C" void c_SteamServerWrapper_Instantiate()
@@ -468,4 +526,23 @@ extern "C" void c_SteamServerWrapper_Destroy()
 {
 	delete steam_server_wrapper;
 	steam_server_wrapper = nullptr;
+}
+
+extern "C" void* c_P2PSessionConnectFail_t_m_steamIDRemote(void *P2PSessionConnectFail_t_instance)
+{
+	CSteamID *id = new CSteamID;
+	*id = static_cast<P2PSessionConnectFail_t*>(P2PSessionConnectFail_t_instance)->m_steamIDRemote;
+	return id;
+}
+
+extern "C" c_EAuthSessionResponse c_ValidateAuthTicketResponse_t_EAuthSessionResponse(void *ValidateAuthTicketResponse_t_instance)
+{
+	return static_cast<c_EAuthSessionResponse>(static_cast<ValidateAuthTicketResponse_t*>(ValidateAuthTicketResponse_t_instance)->m_eAuthSessionResponse);
+}
+
+extern "C" void* c_ValidateAuthTicketResponse_t_m_SteamID(void *ValidateAuthTicketResponse_t_instance)
+{
+	CSteamID *id = new CSteamID;
+	*id = static_cast<ValidateAuthTicketResponse_t*>(ValidateAuthTicketResponse_t_instance)->m_SteamID;
+	return id;
 }
