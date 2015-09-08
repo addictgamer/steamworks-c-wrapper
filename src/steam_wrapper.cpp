@@ -454,7 +454,12 @@ public:
 	m_CallbackPolicyResponse(this, &SteamServerWrapper::OnPolicyResponse),
 	m_CallbackGSAuthTicketResponse(this, &SteamServerWrapper::OnValidateAuthTicketResponse)
 	{
-		//Stuff.
+		c_SteamServerWrapper_OnP2PSessionRequest = nullptr;
+		c_SteamServerWrapper_OnP2PSessionConnectFail = nullptr;
+		c_SteamServerWrapper_OnSteamServersConnected = nullptr;
+		c_SteamServerWrapper_OnSteamServersDisconnected = nullptr;
+		c_SteamServerWrapper_OnPolicyResponse = nullptr;
+		c_SteamServerWrapper_OnValidateAuthTicketResponse = nullptr;
 	}
 
 	STEAM_GAMESERVER_CALLBACK(SteamServerWrapper, OnP2PSessionRequest, P2PSessionRequest_t, m_CallbackP2PSessionRequest);
@@ -551,7 +556,15 @@ public:
 	m_GameJoinRequested(this, &SteamServerClientWrapper::OnGameJoinRequested),
 	m_CallbackGameOverlayActivated(this, &SteamServerClientWrapper::OnGameOverlayActivated)
 	{
-		//Stuff.
+		c_SteamServerClientWrapper_OnP2PSessionConnectFail = nullptr;
+		c_SteamServerClientWrapper_OnLobbyGameCreated = nullptr;
+		c_SteamServerClientWrapper_OnIPCFailure = nullptr;
+		c_SteamServerClientWrapper_OnSteamShutdown = nullptr;
+		c_SteamServerClientWrapper_OnSteamServersConnected = nullptr;
+		c_SteamServerClientWrapper_OnSteamServersDisconnected = nullptr;
+		c_SteamServerClientWrapper_OnSteamServerConnectFailure = nullptr;
+		c_SteamServerClientWrapper_OnGameJoinRequested = nullptr;
+		c_SteamServerClientWrapper_OnGameOverlayActivated = nullptr;
 	}
 
 	STEAM_CALLBACK(SteamServerClientWrapper, OnP2PSessionConnectFail, P2PSessionConnectFail_t, m_CallbackP2PSessionConnectFail);
