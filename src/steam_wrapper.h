@@ -426,12 +426,13 @@ void* c_P2PSessionRequest_t_m_steamIDRemote(void *P2PSessionRequest_t_instance);
  * Function pointers to handle steam callbacks.
  * NOTE: You'll have to implement these yourself. But first, call c_SteamServerWrapper_Instantiate().
  */
-void (*c_SteamServerWrapper_OnP2PSessionRequest)(void *p_Callback);
-void (*c_SteamServerWrapper_OnP2PSessionConnectFail)(void *pCallback);
 void (*c_SteamServerWrapper_OnSteamServersConnected)(void *pLogonSuccess);
+void (*c_SteamServerWrapper_OnSteamServersConnectFailure)(void *pConnectFailure);
 void (*c_SteamServerWrapper_OnSteamServersDisconnected)(void *pLoggedOff);
 void (*c_SteamServerWrapper_OnPolicyResponse)(void *pPolicyResponse);
 void (*c_SteamServerWrapper_OnValidateAuthTicketResponse)(void *pResponse);
+void (*c_SteamServerWrapper_OnP2PSessionRequest)(void *p_Callback);
+void (*c_SteamServerWrapper_OnP2PSessionConnectFail)(void *pCallback);
 
 /*
  * NOTE: Call c_SteamServerWrapper_Destroy() when you're done using this to free the memory.
