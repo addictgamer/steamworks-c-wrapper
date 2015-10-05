@@ -558,34 +558,39 @@ class SteamServerClientWrapper
 public:
 	SteamServerClientWrapper()
 	:
-	m_CallbackP2PSessionConnectFail(this, &SteamServerClientWrapper::OnP2PSessionConnectFail),
 	m_LobbyGameCreated(this, &SteamServerClientWrapper::OnLobbyGameCreated),
-	m_IPCFailureCallback(this, &SteamServerClientWrapper::OnIPCFailure),
-	m_SteamShutdownCallback(this, &SteamServerClientWrapper::OnSteamShutdown),
+	m_GameJoinRequested(this, &SteamServerClientWrapper::OnGameJoinRequested),
+	m_AvatarImageLoadedCreated(this, &SteamServerClientWrapper::OnAvatarImageLoaded),
 	m_SteamServersConnected(this, &SteamServerClientWrapper::OnSteamServersConnected),
 	m_SteamServersDisconnected(this, &SteamServerClientWrapper::OnSteamServersDisconnected),
 	m_SteamServerConnectFailure(this, &SteamServerClientWrapper::OnSteamServerConnectFailure),
-	m_GameJoinRequested(this, &SteamServerClientWrapper::OnGameJoinRequested),
-	m_CallbackGameOverlayActivated(this, &SteamServerClientWrapper::OnGameOverlayActivated)
+	m_CallbackGameOverlayActivated(this, &SteamServerClientWrapper::OnGameOverlayActivated),
+	m_CallbackGameWebCallback( this, &SteamServerClientWrapper::OnGameWebCallback),
+	m_CallbackWorkshopItemInstalled(this, &SteamServerClientWrapper::OnWorkshopItemInstalled),
+	m_CallbackP2PSessionConnectFail(this, &SteamServerClientWrapper::OnP2PSessionConnectFail),
+	m_IPCFailureCallback(this, &SteamServerClientWrapper::OnIPCFailure),
+	m_SteamShutdownCallback(this, &SteamServerClientWrapper::OnSteamShutdown)
 	{
-		c_SteamServerClientWrapper_OnP2PSessionConnectFail = nullptr;
 		c_SteamServerClientWrapper_OnLobbyGameCreated = nullptr;
-		c_SteamServerClientWrapper_OnIPCFailure = nullptr;
-		c_SteamServerClientWrapper_OnSteamShutdown = nullptr;
+		c_SteamServerClientWrapper_OnGameJoinRequested = nullptr;
+		c_SteamServerClientWrapper_OnAvatarImageLoaded = nullptr;
 		c_SteamServerClientWrapper_OnSteamServersConnected = nullptr;
 		c_SteamServerClientWrapper_OnSteamServersDisconnected = nullptr;
 		c_SteamServerClientWrapper_OnSteamServerConnectFailure = nullptr;
-		c_SteamServerClientWrapper_OnGameJoinRequested = nullptr;
 		c_SteamServerClientWrapper_OnGameOverlayActivated = nullptr;
+		c_SteamServerClientWrapper_OnGameWebCallback = nullptr;
+		c_SteamServerClientWrapper_OnWorkshopItemInstalled = nullptr;
+		c_SteamServerClientWrapper_OnP2PSessionConnectFail = nullptr;
+		c_SteamServerClientWrapper_OnIPCFailure = nullptr;
+		c_SteamServerClientWrapper_OnSteamShutdown = nullptr;
 	}
-
-	STEAM_CALLBACK(SteamServerClientWrapper, OnP2PSessionConnectFail, P2PSessionConnectFail_t, m_CallbackP2PSessionConnectFail);
 
 	STEAM_CALLBACK(SteamServerClientWrapper, OnLobbyGameCreated, LobbyGameCreated_t, m_LobbyGameCreated);
 
-	STEAM_CALLBACK(SteamServerClientWrapper, OnIPCFailure, IPCFailure_t, m_IPCFailureCallback);
+	STEAM_CALLBACK(SteamServerClientWrapper, OnGameJoinRequested, GameRichPresenceJoinRequested_t, m_GameJoinRequested);
 
-	STEAM_CALLBACK(SteamServerClientWrapper, OnSteamShutdown, SteamShutdown_t, m_SteamShutdownCallback);
+	//STEAM_CALLBACK( CSpaceWarClient, OnAvatarImageLoaded, AvatarImageLoaded_t, m_AvatarImageLoadedCreated );
+	STEAM_CALLBACK(SteamServerClientWrapper, OnAvatarImageLoaded, AvatarImageLoaded_t, m_AvatarImageLoadedCreated); //TODO: Finish.
 
 	STEAM_CALLBACK(SteamServerClientWrapper, OnSteamServersConnected, SteamServersConnected_t, m_SteamServersConnected);
 
@@ -593,16 +598,20 @@ public:
 
 	STEAM_CALLBACK(SteamServerClientWrapper, OnSteamServerConnectFailure, SteamServerConnectFailure_t, m_SteamServerConnectFailure);
 
-	STEAM_CALLBACK(SteamServerClientWrapper, OnGameJoinRequested, GameRichPresenceJoinRequested_t, m_GameJoinRequested);
-
 	STEAM_CALLBACK(SteamServerClientWrapper, OnGameOverlayActivated, GameOverlayActivated_t, m_CallbackGameOverlayActivated);
-} *steam_server_client_wrapper;
 
-void SteamServerClientWrapper::OnP2PSessionConnectFail(P2PSessionConnectFail_t *pCallback)
-{
-	if (c_SteamServerClientWrapper_OnP2PSessionConnectFail)
-		(*c_SteamServerClientWrapper_OnP2PSessionConnectFail)(pCallback);
-}
+	//STEAM_CALLBACK( CSpaceWarClient, OnGameWebCallback, GameWebCallback_t, m_CallbackGameWebCallback );
+	STEAM_CALLBACK(SteamServerClientWrapper, OnGameWebCallback, GameWebCallback_t, m_CallbackGameWebCallback); //TODO: Finish.
+
+	//STEAM_CALLBACK(CSpaceWarClient, OnWorkshopItemInstalled, ItemInstalled_t, m_CallbackWorkshopItemInstalled);
+	STEAM_CALLBACK(SteamServerClientWrapper, OnWorkshopItemInstalled, ItemInstalled_t, m_CallbackWorkshopItemInstalled); //TODO: Finish.
+
+	STEAM_CALLBACK(SteamServerClientWrapper, OnP2PSessionConnectFail, P2PSessionConnectFail_t, m_CallbackP2PSessionConnectFail);
+
+	STEAM_CALLBACK(SteamServerClientWrapper, OnIPCFailure, IPCFailure_t, m_IPCFailureCallback);
+
+	STEAM_CALLBACK(SteamServerClientWrapper, OnSteamShutdown, SteamShutdown_t, m_SteamShutdownCallback);
+} *steam_server_client_wrapper;
 
 void SteamServerClientWrapper::OnLobbyGameCreated(LobbyGameCreated_t *pCallback)
 {
@@ -610,16 +619,16 @@ void SteamServerClientWrapper::OnLobbyGameCreated(LobbyGameCreated_t *pCallback)
 		(*c_SteamServerClientWrapper_OnLobbyGameCreated)(pCallback);
 }
 
-void SteamServerClientWrapper::OnIPCFailure(IPCFailure_t *failure)
+void SteamServerClientWrapper::OnGameJoinRequested(GameRichPresenceJoinRequested_t *pCallback)
 {
-	if (c_SteamServerClientWrapper_OnIPCFailure)
-		(*c_SteamServerClientWrapper_OnIPCFailure)(failure);
+	if (c_SteamServerClientWrapper_OnGameJoinRequested)
+		(*c_SteamServerClientWrapper_OnGameJoinRequested)(pCallback);
 }
 
-void SteamServerClientWrapper::OnSteamShutdown(SteamShutdown_t *callback)
+void SteamServerClientWrapper::OnAvatarImageLoaded(AvatarImageLoaded_t *pCallback)
 {
-	if (c_SteamServerClientWrapper_OnSteamShutdown)
-		(*c_SteamServerClientWrapper_OnSteamShutdown)(callback);
+	if (c_SteamServerClientWrapper_OnAvatarImageLoaded)
+		(*c_SteamServerClientWrapper_OnAvatarImageLoaded)(pCallback);
 }
 
 void SteamServerClientWrapper::OnSteamServersConnected(SteamServersConnected_t *callback)
@@ -640,16 +649,40 @@ void SteamServerClientWrapper::OnSteamServerConnectFailure(SteamServerConnectFai
 		(*c_SteamServerClientWrapper_OnSteamServerConnectFailure)(callback);
 }
 
-void SteamServerClientWrapper::OnGameJoinRequested(GameRichPresenceJoinRequested_t *pCallback)
-{
-	if (c_SteamServerClientWrapper_OnGameJoinRequested)
-		(*c_SteamServerClientWrapper_OnGameJoinRequested)(pCallback);
-}
-
 void SteamServerClientWrapper::OnGameOverlayActivated(GameOverlayActivated_t *callback)
 {
 	if (c_SteamServerClientWrapper_OnGameOverlayActivated)
 		(*c_SteamServerClientWrapper_OnGameOverlayActivated)(callback);
+}
+
+void SteamServerClientWrapper::OnGameWebCallback(GameWebCallback_t *callback)
+{
+	if (c_SteamServerClientWrapper_OnGameWebCallback)
+		(*c_SteamServerClientWrapper_OnGameWebCallback)(callback);
+}
+
+void SteamServerClientWrapper::OnWorkshopItemInstalled(ItemInstalled_t *pParam)
+{
+	if (c_SteamServerClientWrapper_OnWorkshopItemInstalled)
+		(c_SteamServerClientWrapper_OnWorkshopItemInstalled)(pParam);
+}
+
+void SteamServerClientWrapper::OnP2PSessionConnectFail(P2PSessionConnectFail_t *pCallback)
+{
+	if (c_SteamServerClientWrapper_OnP2PSessionConnectFail)
+		(*c_SteamServerClientWrapper_OnP2PSessionConnectFail)(pCallback);
+}
+
+void SteamServerClientWrapper::OnIPCFailure(IPCFailure_t *failure)
+{
+	if (c_SteamServerClientWrapper_OnIPCFailure)
+		(*c_SteamServerClientWrapper_OnIPCFailure)(failure);
+}
+
+void SteamServerClientWrapper::OnSteamShutdown(SteamShutdown_t *callback)
+{
+	if (c_SteamServerClientWrapper_OnSteamShutdown)
+		(*c_SteamServerClientWrapper_OnSteamShutdown)(callback);
 }
 
 extern "C" void c_SteamServerClientWrapper_Instantiate()

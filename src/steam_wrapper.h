@@ -479,15 +479,18 @@ void* c_ValidateAuthTicketResponse_t_m_SteamID(void *ValidateAuthTicketResponse_
  * Function Pointers to handle steam callbacks.
  * NOTE: You'll have to implement these yourself. But first, call c_SteamServerClientWrapper_Instantiate().
  */
-void (*c_SteamServerClientWrapper_OnP2PSessionConnectFail)(void *pCallback);
 void (*c_SteamServerClientWrapper_OnLobbyGameCreated)(void *pCallback);
-void (*c_SteamServerClientWrapper_OnIPCFailure)(void *failure);
-void (*c_SteamServerClientWrapper_OnSteamShutdown)(void *callback);
+void (*c_SteamServerClientWrapper_OnGameJoinRequested)(void *pCallback);
+void (*c_SteamServerClientWrapper_OnAvatarImageLoaded)(void *pCallback);
 void (*c_SteamServerClientWrapper_OnSteamServersConnected)(void *callback);
 void (*c_SteamServerClientWrapper_OnSteamServersDisconnected)(void *callback);
 void (*c_SteamServerClientWrapper_OnSteamServerConnectFailure)(void *callback);
-void (*c_SteamServerClientWrapper_OnGameJoinRequested)(void *pCallback);
 void (*c_SteamServerClientWrapper_OnGameOverlayActivated)(void *callback);
+void (*c_SteamServerClientWrapper_OnGameWebCallback)(void *callback);
+void (*c_SteamServerClientWrapper_OnWorkshopItemInstalled)(void *pParam);
+void (*c_SteamServerClientWrapper_OnP2PSessionConnectFail)(void *pCallback);
+void (*c_SteamServerClientWrapper_OnIPCFailure)(void *failure);
+void (*c_SteamServerClientWrapper_OnSteamShutdown)(void *callback);
 
 /*
  * NOTE: Call c_SteamServerClientWrapper_Destroy() when you're done using this to free to memory.
