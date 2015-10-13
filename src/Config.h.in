@@ -2,6 +2,6 @@
 	typedef unsigned long ulong;
 #endif
 
-#if @APPLE@
+#if @Apple@
 	#define APPLE
 #endif
