@@ -7,6 +7,10 @@
 
 #include "Config.h"
 
+#ifdef APPLE
+#include <stdlib.h>
+#endif
+
 extern "C"
 {
 	#include "steam_wrapper.h"

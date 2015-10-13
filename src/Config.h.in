@@ -1,3 +1,7 @@
 #if @Windows@
 	typedef unsigned long ulong;
 #endif
+
+#if @APPLE@
+	#define APPLE
+#endif
