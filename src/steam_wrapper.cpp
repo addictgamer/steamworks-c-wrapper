@@ -282,6 +282,11 @@ extern "C" void* c_SteamMatchmaking_GetLobbyMemberByIndex(void *steamIDLobby, in
 	return id; //Still don't like this method.
 }
 
+extern "C" const char* c_SteamFriends_GetPersonaName()
+{
+	return SteamFriends()->GetPersonaName();
+}
+
 extern "C" const char* c_SteamFriends_GetFriendPersonaName(void *steamIDLobbyMember)
 {
 	return SteamFriends()->GetFriendPersonaName(*static_cast<CSteamID*>(steamIDLobbyMember));
@@ -443,6 +448,16 @@ extern "C" void* c_P2PSessionRequest_t_m_steamIDRemote(void *P2PSessionRequest_t
 {
 	CSteamID *id = new CSteamID;
 	*id = static_cast<P2PSessionRequest_t*>(P2PSessionRequest_t_instance)->m_steamIDRemote;
+	return id;
+}
+
+extern "C" c_EResult c_LobbyCreated_Result(void *pCallback) {
+	return static_cast<c_EResult>(static_cast<LobbyCreated_t*>(pCallback)->m_eResult);
+}
+
+extern "C" void* c_LobbyCreated_Lobby(void *pCallback) {
+	CSteamID *id = new CSteamID;
+	*id = static_cast<LobbyCreated_t*>(pCallback)->m_ulSteamIDLobby;
 	return id;
 }
 
