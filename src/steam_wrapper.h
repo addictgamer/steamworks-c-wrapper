@@ -491,6 +491,9 @@ void (*c_SteamServerClientWrapper_OnWorkshopItemInstalled)(void *pParam);
 void (*c_SteamServerClientWrapper_OnP2PSessionConnectFail)(void *pCallback);
 void (*c_SteamServerClientWrapper_OnIPCFailure)(void *failure);
 void (*c_SteamServerClientWrapper_OnSteamShutdown)(void *callback);
+void (*c_SteamServerClientWrapper_OnLobbyCreated)(void *pCallback, bool bIOFailure); //Where pCallback is a pointer to type LobbyCreated_t.
+void (*c_SteamServerClientWrapper_OnLobbyEntered)(void *pCallback, bool bIOFailure); //Where pCallback is a pointer to type LobbyEnter_t.
+void (*c_SteamServerClientWrapper_OnRequestEncryptedAppTicket)(void *pEncryptedAppTicketResponse, bool bIOFailure); //Where pEncryptedAppTicketResponse is of type EncryptedAppTicketResponse_t.
 
 /*
  * NOTE: Call c_SteamServerClientWrapper_Destroy() when you're done using this to free to memory.
