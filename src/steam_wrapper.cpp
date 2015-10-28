@@ -630,6 +630,18 @@ public:
 	STEAM_CALLBACK(SteamServerClientWrapper, OnIPCFailure, IPCFailure_t, m_IPCFailureCallback);
 
 	STEAM_CALLBACK(SteamServerClientWrapper, OnSteamShutdown, SteamShutdown_t, m_SteamShutdownCallback);
+
+	void OnLobbyCreated(LobbyCreated_t *pCallback, bool bIOFailure);
+	CCallResult<SteamServerClientWrapper, LobbyCreated_t> m_SteamCallResultLobbyCreated;
+	void m_SteamCallResultLobbyCreated_Set(SteamAPICall_t hSteamAPICall);
+
+	void OnLobbyEntered( LobbyEnter_t *pCallback, bool bIOFailure );
+	CCallResult<SteamServerClientWrapper, LobbyEnter_t> m_SteamCallResultLobbyEntered; //Why isn't this set in the example?
+
+	// Called when SteamUser()->RequestEncryptedAppTicket() returns asynchronously
+	void OnRequestEncryptedAppTicket( EncryptedAppTicketResponse_t *pEncryptedAppTicketResponse, bool bIOFailure );
+	CCallResult<SteamServerClientWrapper, EncryptedAppTicketResponse_t> m_SteamCallResultEncryptedAppTicket;
+	void m_SteamCallResultEncryptedAppTicket_Set(SteamAPICall_t hSteamAPICall);
 } *steam_server_client_wrapper;
 
 void SteamServerClientWrapper::OnLobbyGameCreated(LobbyGameCreated_t *pCallback)
@@ -702,6 +714,34 @@ void SteamServerClientWrapper::OnSteamShutdown(SteamShutdown_t *callback)
 {
 	if (c_SteamServerClientWrapper_OnSteamShutdown)
 		(*c_SteamServerClientWrapper_OnSteamShutdown)(callback);
+}
+
+void SteamServerClientWrapper::OnLobbyCreated(LobbyCreated_t *pCallback, bool bIOFailure)
+{
+	if (c_SteamServerClientWrapper_OnLobbyCreated)
+		(*c_SteamServerClientWrapper_OnLobbyCreated)(pCallback, bIOFailure);
+}
+
+void SteamServerClientWrapper::m_SteamCallResultLobbyCreated_Set(SteamAPICall_t hSteamAPICall)
+{
+	m_SteamCallResultLobbyCreated.Set(hSteamAPICall, this, &SteamServerClientWrapper::OnLobbyCreated);
+}
+
+void SteamServerClientWrapper::OnLobbyEntered(LobbyEnter_t *pCallback, bool bIOFailure)
+{
+	if (c_SteamServerClientWrapper_OnLobbyEntered)
+		(*c_SteamServerClientWrapper_OnLobbyEntered)(pCallback, bIOFailure);
+}
+
+void SteamServerClientWrapper::OnRequestEncryptedAppTicket(EncryptedAppTicketResponse_t *pEncryptedAppTicketResponse, bool bIOFailure)
+{
+	if (c_SteamServerClientWrapper_OnRequestEncryptedAppTicket)
+		(*c_SteamServerClientWrapper_OnRequestEncryptedAppTicket)(pEncryptedAppTicketResponse, bIOFailure);
+}
+
+void SteamServerClientWrapper::m_SteamCallResultEncryptedAppTicket_Set(SteamAPICall_t hSteamAPICall)
+{
+	m_SteamCallResultEncryptedAppTicket.Set(hSteamAPICall, this, &SteamServerClientWrapper::OnRequestEncryptedAppTicket);
 }
 
 extern "C" void c_SteamServerClientWrapper_Instantiate()
