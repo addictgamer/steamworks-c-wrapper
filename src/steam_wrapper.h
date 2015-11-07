@@ -318,7 +318,7 @@ typedef enum c_ELobbyType_t
 	c_k_ELobbyTypeInvisible = 3,
 } c_ELobbyType;
 
-c_SteamAPICall_t c_SteamMatchmaking_CreateLobby(c_ELobbyType eLobbyType, int cMaxMembers);
+c_SteamAPICall_t c_SteamMatchmaking_CreateLobby(c_ELobbyType eLobbyType, int cMaxMembers, void *onLobbyCreatedFunc);
 
 /*
  * NOTE: This is C, so pass a void pointer to the CSteamID you want to use for steamIDLobby.
@@ -497,6 +497,8 @@ void (*c_SteamServerClientWrapper_OnLobbyCreated)(void *pCallback, bool bIOFailu
 void (*c_SteamServerClientWrapper_OnLobbyEntered)(void *pCallback, bool bIOFailure); //Where pCallback is a pointer to type LobbyEnter_t.
 void (*c_SteamServerClientWrapper_OnRequestEncryptedAppTicket)(void *pEncryptedAppTicketResponse, bool bIOFailure); //Where pEncryptedAppTicketResponse is of type EncryptedAppTicketResponse_t.
 
+void (*c_SteamServerClientWrapper_GameServerPingOnServerResponded)(void *steamID);
+
 /*
  * NOTE: Call c_SteamServerClientWrapper_Destroy() when you're done using this to free to memory.
  */
@@ -636,5 +638,8 @@ typedef enum c_EResult
 
 c_EResult c_LobbyCreated_Result(void *pCallback);
 void* c_LobbyCreated_Lobby(void *pCallback);
+const char *c_GameJoinRequested_m_rgchConnect(void *pCallback);
+void c_RetrieveSteamIDFromGameServer( uint32_t m_unServerIP, uint16_t m_usServerPort );
+void c_SteamMatchmaking_JoinLobbyPCH( const char *pchLobbyID,  void *onLobbyEnteredFunc );
 
 #endif

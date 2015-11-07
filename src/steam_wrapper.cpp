@@ -367,11 +367,6 @@ extern "C" void c_SteamMatchmaking_AddRequestLobbyListFilterSlotsAvailable(int n
 	SteamMatchmaking()->AddRequestLobbyListFilterSlotsAvailable(nSlotsAvailable);
 }
 
-extern "C" c_SteamAPICall_t c_SteamMatchmaking_CreateLobby(c_ELobbyType eLobbyType, int cMaxMembers)
-{
-	return SteamMatchmaking()->CreateLobby(static_cast<ELobbyType>(eLobbyType), cMaxMembers);
-}
-
 extern "C" c_SteamAPICall_t c_SteamMatchmaking_JoinLobby(void *steamIDLobby)
 {
 	return SteamMatchmaking()->JoinLobby(*static_cast<CSteamID*>(steamIDLobby));
@@ -451,14 +446,21 @@ extern "C" void* c_P2PSessionRequest_t_m_steamIDRemote(void *P2PSessionRequest_t
 	return id;
 }
 
-extern "C" c_EResult c_LobbyCreated_Result(void *pCallback) {
+extern "C" c_EResult c_LobbyCreated_Result(void *pCallback)
+{
 	return static_cast<c_EResult>(static_cast<LobbyCreated_t*>(pCallback)->m_eResult);
 }
 
-extern "C" void* c_LobbyCreated_Lobby(void *pCallback) {
+extern "C" void* c_LobbyCreated_Lobby(void *pCallback)
+{
 	CSteamID *id = new CSteamID;
 	*id = static_cast<LobbyCreated_t*>(pCallback)->m_ulSteamIDLobby;
 	return id;
+}
+
+extern "C" const char *c_GameJoinRequested_m_rgchConnect(void *pCallback)
+{
+	return static_cast<const char *>(static_cast<GameRichPresenceJoinRequested_t*>(pCallback)->m_rgchConnect);
 }
 
 class SteamServerWrapper
@@ -637,12 +639,76 @@ public:
 
 	void OnLobbyEntered( LobbyEnter_t *pCallback, bool bIOFailure );
 	CCallResult<SteamServerClientWrapper, LobbyEnter_t> m_SteamCallResultLobbyEntered; //Why isn't this set in the example?
+	void m_SteamCallResultLobbyEntered_Set(SteamAPICall_t hSteamAPICall);
 
 	// Called when SteamUser()->RequestEncryptedAppTicket() returns asynchronously
 	void OnRequestEncryptedAppTicket( EncryptedAppTicketResponse_t *pEncryptedAppTicketResponse, bool bIOFailure );
 	CCallResult<SteamServerClientWrapper, EncryptedAppTicketResponse_t> m_SteamCallResultEncryptedAppTicket;
 	void m_SteamCallResultEncryptedAppTicket_Set(SteamAPICall_t hSteamAPICall);
+	void RetrieveSteamIDFromGameServer( uint32_t m_unServerIP, uint16_t m_usServerPort );
+
+private:
+	// simple class to marshal callbacks from pinging a game server
+	class CGameServerPing : public ISteamMatchmakingPingResponse
+	{
+	public:
+		CGameServerPing()
+		{
+			m_hGameServerQuery = HSERVERQUERY_INVALID;
+			m_pClient = NULL;
+		}
+
+		void RetrieveSteamIDFromGameServer( SteamServerClientWrapper *pClient, uint32_t unIP, uint16_t unPort )
+		{
+			m_pClient = pClient;
+			m_hGameServerQuery = SteamMatchmakingServers()->PingServer( unIP, unPort, this );
+		}
+
+		void CancelPing()
+		{
+			m_hGameServerQuery = HSERVERQUERY_INVALID;
+		}
+
+		// Server has responded successfully and has updated data
+		virtual void ServerResponded( gameserveritem_t &server )
+		{
+			if ( m_hGameServerQuery != HSERVERQUERY_INVALID && server.m_steamID.IsValid() )
+			{
+				(*c_SteamServerClientWrapper_GameServerPingOnServerResponded)( static_cast<void *>(&server.m_steamID) );
+			}
+
+			m_hGameServerQuery = HSERVERQUERY_INVALID;
+		}
+
+		// Server failed to respond to the ping request
+		virtual void ServerFailedToRespond()
+		{
+			m_hGameServerQuery = HSERVERQUERY_INVALID;
+		}
+
+	private:
+		HServerQuery m_hGameServerQuery;	// we're pinging a game server so we can convert IP:Port to a steamID
+		SteamServerClientWrapper *m_pClient;
+	};
+	CGameServerPing m_GameServerPing;
 } *steam_server_client_wrapper;
+
+extern "C" c_SteamAPICall_t c_SteamMatchmaking_CreateLobby(c_ELobbyType eLobbyType, int cMaxMembers, void *onLobbyCreatedFunc)
+{
+	c_SteamAPICall_t steamAPICall = SteamMatchmaking()->CreateLobby(static_cast<ELobbyType>(eLobbyType), cMaxMembers);
+	steam_server_client_wrapper->m_SteamCallResultLobbyCreated_Set(steamAPICall);
+	return steamAPICall;
+}
+
+extern "C" void c_RetrieveSteamIDFromGameServer( uint32_t m_unServerIP, uint16_t m_usServerPort )
+{
+	steam_server_client_wrapper->RetrieveSteamIDFromGameServer( m_unServerIP, m_usServerPort );
+}
+
+void SteamServerClientWrapper::RetrieveSteamIDFromGameServer( uint32_t m_unServerIP, uint16_t m_usServerPort )
+{
+	m_GameServerPing.RetrieveSteamIDFromGameServer( this, m_unServerIP, m_usServerPort );
+}
 
 void SteamServerClientWrapper::OnLobbyGameCreated(LobbyGameCreated_t *pCallback)
 {
@@ -733,6 +799,11 @@ void SteamServerClientWrapper::OnLobbyEntered(LobbyEnter_t *pCallback, bool bIOF
 		(*c_SteamServerClientWrapper_OnLobbyEntered)(pCallback, bIOFailure);
 }
 
+void SteamServerClientWrapper::m_SteamCallResultLobbyEntered_Set(SteamAPICall_t hSteamAPICall)
+{
+	m_SteamCallResultLobbyEntered.Set(hSteamAPICall, this, &SteamServerClientWrapper::OnLobbyEntered);
+}
+
 void SteamServerClientWrapper::OnRequestEncryptedAppTicket(EncryptedAppTicketResponse_t *pEncryptedAppTicketResponse, bool bIOFailure)
 {
 	if (c_SteamServerClientWrapper_OnRequestEncryptedAppTicket)
@@ -775,4 +846,14 @@ extern "C" void c_SteamFriends_ActivateGameOverlayInviteDialog(void *steamIDLobb
 extern "C" uint8_t c_GameOverlayActivated_t_m_bActive(void *GameOverlayActivated_t_instance)
 {
 	return static_cast<GameOverlayActivated_t*>(GameOverlayActivated_t_instance)->m_bActive;
+}
+
+extern "C" void c_SteamMatchmaking_JoinLobbyPCH(const char *pchLobbyID, void *onLobbyEnteredFunc)
+{
+	CSteamID steamIDLobby( (uint64)atoll( pchLobbyID ) );
+	if( steamIDLobby.IsValid() )
+	{
+		c_SteamAPICall_t steamAPICall = SteamMatchmaking()->JoinLobby(steamIDLobby);
+		steam_server_client_wrapper->m_SteamCallResultLobbyEntered_Set(steamAPICall);
+	}
 }
