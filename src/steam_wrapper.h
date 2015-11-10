@@ -220,6 +220,8 @@ void* c_SteamMatchmaking_GetLobbyMemberByIndex(void *steamIDLobby, int iMember);
  */
 const char* c_SteamFriends_GetFriendPersonaName(void *steamIDLobbyMember);
 
+const char* c_SteamFriends_GetPersonaName();
+
 /*
  * NOTE: In C++, this would be used like so:
  CSteamID steamIDLobby;
@@ -316,7 +318,7 @@ typedef enum c_ELobbyType_t
 	c_k_ELobbyTypeInvisible = 3,
 } c_ELobbyType;
 
-c_SteamAPICall_t c_SteamMatchmaking_CreateLobby(c_ELobbyType eLobbyType, int cMaxMembers);
+c_SteamAPICall_t c_SteamMatchmaking_CreateLobby(c_ELobbyType eLobbyType, int cMaxMembers, void *onLobbyCreatedFunc);
 
 /*
  * NOTE: This is C, so pass a void pointer to the CSteamID you want to use for steamIDLobby.
@@ -426,12 +428,13 @@ void* c_P2PSessionRequest_t_m_steamIDRemote(void *P2PSessionRequest_t_instance);
  * Function pointers to handle steam callbacks.
  * NOTE: You'll have to implement these yourself. But first, call c_SteamServerWrapper_Instantiate().
  */
-void (*c_SteamServerWrapper_OnP2PSessionRequest)(void *p_Callback);
-void (*c_SteamServerWrapper_OnP2PSessionConnectFail)(void *pCallback);
 void (*c_SteamServerWrapper_OnSteamServersConnected)(void *pLogonSuccess);
+void (*c_SteamServerWrapper_OnSteamServersConnectFailure)(void *pConnectFailure);
 void (*c_SteamServerWrapper_OnSteamServersDisconnected)(void *pLoggedOff);
 void (*c_SteamServerWrapper_OnPolicyResponse)(void *pPolicyResponse);
 void (*c_SteamServerWrapper_OnValidateAuthTicketResponse)(void *pResponse);
+void (*c_SteamServerWrapper_OnP2PSessionRequest)(void *p_Callback);
+void (*c_SteamServerWrapper_OnP2PSessionConnectFail)(void *pCallback);
 
 /*
  * NOTE: Call c_SteamServerWrapper_Destroy() when you're done using this to free the memory.
@@ -478,15 +481,23 @@ void* c_ValidateAuthTicketResponse_t_m_SteamID(void *ValidateAuthTicketResponse_
  * Function Pointers to handle steam callbacks.
  * NOTE: You'll have to implement these yourself. But first, call c_SteamServerClientWrapper_Instantiate().
  */
-void (*c_SteamServerClientWrapper_OnP2PSessionConnectFail)(void *pCallback);
 void (*c_SteamServerClientWrapper_OnLobbyGameCreated)(void *pCallback);
-void (*c_SteamServerClientWrapper_OnIPCFailure)(void *failure);
-void (*c_SteamServerClientWrapper_OnSteamShutdown)(void *callback);
+void (*c_SteamServerClientWrapper_OnGameJoinRequested)(void *pCallback);
+void (*c_SteamServerClientWrapper_OnAvatarImageLoaded)(void *pCallback);
 void (*c_SteamServerClientWrapper_OnSteamServersConnected)(void *callback);
 void (*c_SteamServerClientWrapper_OnSteamServersDisconnected)(void *callback);
 void (*c_SteamServerClientWrapper_OnSteamServerConnectFailure)(void *callback);
-void (*c_SteamServerClientWrapper_OnGameJoinRequested)(void *pCallback);
 void (*c_SteamServerClientWrapper_OnGameOverlayActivated)(void *callback);
+void (*c_SteamServerClientWrapper_OnGameWebCallback)(void *callback);
+void (*c_SteamServerClientWrapper_OnWorkshopItemInstalled)(void *pParam);
+void (*c_SteamServerClientWrapper_OnP2PSessionConnectFail)(void *pCallback);
+void (*c_SteamServerClientWrapper_OnIPCFailure)(void *failure);
+void (*c_SteamServerClientWrapper_OnSteamShutdown)(void *callback);
+void (*c_SteamServerClientWrapper_OnLobbyCreated)(void *pCallback, bool bIOFailure); //Where pCallback is a pointer to type LobbyCreated_t.
+void (*c_SteamServerClientWrapper_OnLobbyEntered)(void *pCallback, bool bIOFailure); //Where pCallback is a pointer to type LobbyEnter_t.
+void (*c_SteamServerClientWrapper_OnRequestEncryptedAppTicket)(void *pEncryptedAppTicketResponse, bool bIOFailure); //Where pEncryptedAppTicketResponse is of type EncryptedAppTicketResponse_t.
+
+void (*c_SteamServerClientWrapper_GameServerPingOnServerResponded)(void *steamID);
 
 /*
  * NOTE: Call c_SteamServerClientWrapper_Destroy() when you're done using this to free to memory.
@@ -506,14 +517,129 @@ enum { c_k_cchMaxRichPresenceValueLength = 256 };
 /*
  * Takes a void pointer to the GameRichPresenceJoinRequested_t you want to extract m_rgchConnect from.
  * The char array returned is of size c_k_cchMaxRichPresenceValueLength.
- * NOTE: This is C, so pass a void pointer to the GameRichPresenceJoinRequested_t you want to use for GameRichPresenceJoinRequested_t_instance.
  * NOTE: You are responsible for freeing the char array returned by this function.
  */
 char* c_GameRichPresenceJoinRequested_t_m_rgchConnect(void *GameRichPresenceJoinRequested_t_instance);
 
 /*
- * NOTE: steamIDLobby should be a CSteamID pointer.
+ * steamIDLobby should be a CSteamID pointer.
  */
 void c_SteamFriends_ActivateGameOverlayInviteDialog(void *steamIDLobby);
+
+/*
+ * GameOverlayActivated_t_instance is a pointer to a GameOverlayActivated_t
+ */
+uint8_t c_GameOverlayActivated_t_m_bActive(void *GameOverlayActivated_t_instance);
+
+// General result codes
+typedef enum c_EResult
+{
+	c_k_EResultOK	= 1,							// success
+	c_k_EResultFail = 2,							// generic failure 
+	c_k_EResultNoConnection = 3,					// no/failed network connection
+//	c_k_EResultNoConnectionRetry = 4,				// OBSOLETE - removed
+	c_k_EResultInvalidPassword = 5,				// password/ticket is invalid
+	c_k_EResultLoggedInElsewhere = 6,				// same user logged in elsewhere
+	c_k_EResultInvalidProtocolVer = 7,			// protocol version is incorrect
+	c_k_EResultInvalidParam = 8,					// a parameter is incorrect
+	c_k_EResultFileNotFound = 9,					// file was not found
+	c_k_EResultBusy = 10,							// called method busy - action not taken
+	c_k_EResultInvalidState = 11,					// called object was in an invalid state
+	c_k_EResultInvalidName = 12,					// name is invalid
+	c_k_EResultInvalidEmail = 13,					// email is invalid
+	c_k_EResultDuplicateName = 14,				// name is not unique
+	c_k_EResultAccessDenied = 15,					// access is denied
+	c_k_EResultTimeout = 16,						// operation timed out
+	c_k_EResultBanned = 17,						// VAC2 banned
+	c_k_EResultAccountNotFound = 18,				// account not found
+	c_k_EResultInvalidSteamID = 19,				// steamID is invalid
+	c_k_EResultServiceUnavailable = 20,			// The requested service is currently unavailable
+	c_k_EResultNotLoggedOn = 21,					// The user is not logged on
+	c_k_EResultPending = 22,						// Request is pending (may be in process, or waiting on third party)
+	c_k_EResultEncryptionFailure = 23,			// Encryption or Decryption failed
+	c_k_EResultInsufficientPrivilege = 24,		// Insufficient privilege
+	c_k_EResultLimitExceeded = 25,				// Too much of a good thing
+	c_k_EResultRevoked = 26,						// Access has been revoked (used for revoked guest passes)
+	c_k_EResultExpired = 27,						// License/Guest pass the user is trying to access is expired
+	c_k_EResultAlreadyRedeemed = 28,				// Guest pass has already been redeemed by account, cannot be acked again
+	c_k_EResultDuplicateRequest = 29,				// The request is a duplicate and the action has already occurred in the past, ignored this time
+	c_k_EResultAlreadyOwned = 30,					// All the games in this guest pass redemption request are already owned by the user
+	c_k_EResultIPNotFound = 31,					// IP address not found
+	c_k_EResultPersistFailed = 32,				// failed to write change to the data store
+	c_k_EResultLockingFailed = 33,				// failed to acquire access lock for this operation
+	c_k_EResultLogonSessionReplaced = 34,
+	c_k_EResultConnectFailed = 35,
+	c_k_EResultHandshakeFailed = 36,
+	c_k_EResultIOFailure = 37,
+	c_k_EResultRemoteDisconnect = 38,
+	c_k_EResultShoppingCartNotFound = 39,			// failed to find the shopping cart requested
+	c_k_EResultBlocked = 40,						// a user didn't allow it
+	c_k_EResultIgnored = 41,						// target is ignoring sender
+	c_k_EResultNoMatch = 42,						// nothing matching the request found
+	c_k_EResultAccountDisabled = 43,
+	c_k_EResultServiceReadOnly = 44,				// this service is not accepting content changes right now
+	c_k_EResultAccountNotFeatured = 45,			// account doesn't have value, so this feature isn't available
+	c_k_EResultAdministratorOK = 46,				// allowed to take this action, but only because requester is admin
+	c_k_EResultContentVersion = 47,				// A Version mismatch in content transmitted within the Steam protocol.
+	c_k_EResultTryAnotherCM = 48,					// The current CM can't service the user making a request, user should try another.
+	c_k_EResultPasswordRequiredToKickSession = 49,// You are already logged in elsewhere, this cached credential login has failed.
+	c_k_EResultAlreadyLoggedInElsewhere = 50,		// You are already logged in elsewhere, you must wait
+	c_k_EResultSuspended = 51,					// Long running operation (content download) suspended/paused
+	c_k_EResultCancelled = 52,					// Operation canceled (typically by user: content download)
+	c_k_EResultDataCorruption = 53,				// Operation canceled because data is ill formed or unrecoverable
+	c_k_EResultDiskFull = 54,						// Operation canceled - not enough disk space.
+	c_k_EResultRemoteCallFailed = 55,				// an remote call or IPC call failed
+	c_k_EResultPasswordUnset = 56,				// Password could not be verified as it's unset server side
+	c_k_EResultExternalAccountUnlinked = 57,		// External account (PSN, Facebook...) is not linked to a Steam account
+	c_k_EResultPSNTicketInvalid = 58,				// PSN ticket was invalid
+	c_k_EResultExternalAccountAlreadyLinked = 59,	// External account (PSN, Facebook...) is already linked to some other account, must explicitly request to replace/delete the link first
+	c_k_EResultRemoteFileConflict = 60,			// The sync cannot resume due to a conflict between the local and remote files
+	c_k_EResultIllegalPassword = 61,				// The requested new password is not legal
+	c_k_EResultSameAsPreviousValue = 62,			// new value is the same as the old one ( secret question and answer )
+	c_k_EResultAccountLogonDenied = 63,			// account login denied due to 2nd factor authentication failure
+	c_k_EResultCannotUseOldPassword = 64,			// The requested new password is not legal
+	c_k_EResultInvalidLoginAuthCode = 65,			// account login denied due to auth code invalid
+	c_k_EResultAccountLogonDeniedNoMail = 66,		// account login denied due to 2nd factor auth failure - and no mail has been sent
+	c_k_EResultHardwareNotCapableOfIPT = 67,		// 
+	c_k_EResultIPTInitError = 68,					// 
+	c_k_EResultParentalControlRestricted = 69,	// operation failed due to parental control restrictions for current user
+	c_k_EResultFacebookQueryError = 70,			// Facebook query returned an error
+	c_k_EResultExpiredLoginAuthCode = 71,			// account login denied due to auth code expired
+	c_k_EResultIPLoginRestrictionFailed = 72,
+	c_k_EResultAccountLockedDown = 73,
+	c_k_EResultAccountLogonDeniedVerifiedEmailRequired = 74,
+	c_k_EResultNoMatchingURL = 75,
+	c_k_EResultBadResponse = 76,					// parse failure, missing field, etc.
+	c_k_EResultRequirePasswordReEntry = 77,		// The user cannot complete the action until they re-enter their password
+	c_k_EResultValueOutOfRange = 78,				// the value entered is outside the acceptable range
+	c_k_EResultUnexpectedError = 79,				// something happened that we didn't expect to ever happen
+	c_k_EResultDisabled = 80,						// The requested service has been configured to be unavailable
+	c_k_EResultInvalidCEGSubmission = 81,			// The set of files submitted to the CEG server are not valid !
+	c_k_EResultRestrictedDevice = 82,				// The device being used is not allowed to perform this action
+	c_k_EResultRegionLocked = 83,					// The action could not be complete because it is region restricted
+	c_k_EResultRateLimitExceeded = 84,			// Temporary rate limit exceeded, try again later, different from c_k_EResultLimitExceeded which may be permanent
+	c_k_EResultAccountLoginDeniedNeedTwoFactor = 85,	// Need two-factor code to login
+	c_k_EResultItemDeleted = 86,					// The thing we're trying to access has been deleted
+	c_k_EResultAccountLoginDeniedThrottle = 87,	// login attempt failed, try to throttle response to possible attacker
+	c_k_EResultTwoFactorCodeMismatch = 88,		// two factor code mismatch
+	c_k_EResultTwoFactorActivationCodeMismatch = 89,	// activation code for two-factor didn't match
+	c_k_EResultAccountAssociatedToMultiplePartners = 90,	// account has been associated with multiple partners
+	c_k_EResultNotModified = 91,					// data not modified
+	c_k_EResultNoMobileDevice = 92,				// the account does not have a mobile device associated with it
+	c_k_EResultTimeNotSynced = 93,				// the time presented is out of range or tolerance
+	c_k_EResultSmsCodeFailed = 94,				// SMS code failure (no match, none pending, etc.)
+	c_k_EResultAccountLimitExceeded = 95,			// Too many accounts access this resource
+	c_k_EResultAccountActivityLimitExceeded = 96,	// Too many changes to this account
+	c_k_EResultPhoneActivityLimitExceeded = 97,	// Too many changes to this phone
+	c_k_EResultRefundToWallet = 98,				// Cannot refund to payment method, must use wallet
+	c_k_EResultEmailSendFailure = 99,				// Cannot send an email
+	c_k_EResultNotSettled = 100,					// Can't perform operation till payment has settled
+} c_EResult;
+
+c_EResult c_LobbyCreated_Result(void *pCallback);
+void* c_LobbyCreated_Lobby(void *pCallback);
+const char *c_GameJoinRequested_m_rgchConnect(void *pCallback);
+void c_RetrieveSteamIDFromGameServer( uint32_t m_unServerIP, uint16_t m_usServerPort );
+void c_SteamMatchmaking_JoinLobbyPCH( const char *pchLobbyID,  void *onLobbyEnteredFunc );
 
 #endif
