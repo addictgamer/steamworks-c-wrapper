@@ -101,9 +101,9 @@ extern "C" void c_SteamGameServerNetworking_AcceptP2PSessionWithUser(void* steam
 	SteamGameServerNetworking()->AcceptP2PSessionWithUser(*static_cast<CSteamID* >(steamIDRemote));
 }
 
-extern "C" bool c_SteamGameServerNetworking_SendP2PPacket(void* steamIDRemote, const void *pubData, uint32_t cubData, c_EP2PSend eP2PSendType, int nChannel)
+extern "C" void c_SteamNetworking_AcceptP2PSessionWithUser(void* steamIDRemote)
 {
-	return SteamGameServerNetworking()->SendP2PPacket(*static_cast<CSteamID* >(steamIDRemote), pubData, cubData, static_cast<EP2PSend>(eP2PSendType), nChannel);
+	SteamNetworking()->AcceptP2PSessionWithUser(*static_cast<CSteamID* >(steamIDRemote));
 }
 
 extern "C" c_EBeginAuthSessionResult c_SteamGameServer_BeginAuthSession(const void *pAuthTicket, int cbAuthTicket, void* steamID)
@@ -114,6 +114,11 @@ extern "C" c_EBeginAuthSessionResult c_SteamGameServer_BeginAuthSession(const vo
 extern "C" void c_SteamGameServer_EndAuthSession(void* steamID)
 {
 	SteamGameServer()->EndAuthSession(*static_cast<CSteamID* >(steamID));
+}
+
+extern "C" bool c_SteamGameServerNetworking_SendP2PPacket(void* steamIDRemote, const void *pubData, uint32_t cubData, c_EP2PSend eP2PSendType, int nChannel)
+{
+	return SteamGameServerNetworking()->SendP2PPacket(*static_cast<CSteamID* >(steamIDRemote), pubData, cubData, static_cast<EP2PSend>(eP2PSendType), nChannel);
 }
 
 extern "C" bool c_SteamGameServerNetworking_IsP2PPacketAvailable(uint32_t *pcubMsgSize, int nChannel)
@@ -218,6 +223,21 @@ extern "C" bool c_SteamUserStats()
 	return false;
 }
 
+extern "C" bool c_SteamNetworking_SendP2PPacket(void* steamIDRemote, const void *pubData, uint32_t cubData, c_EP2PSend eP2PSendType, int nChannel)
+{
+	return SteamNetworking()->SendP2PPacket(*static_cast<CSteamID* >(steamIDRemote), pubData, cubData, static_cast<EP2PSend>(eP2PSendType), nChannel);
+}
+
+extern "C" bool c_SteamNetworking_IsP2PPacketAvailable(uint32_t *pcubMsgSize, int nChannel)
+{
+	return SteamNetworking()->IsP2PPacketAvailable(pcubMsgSize, nChannel);
+}
+
+extern "C" bool c_SteamNetworking_ReadP2PPacket(void *pubDest, uint32_t cubDest, uint32_t *pcubMsgSize, void* psteamIDRemote, int nChannel)
+{
+	return SteamNetworking()->ReadP2PPacket(pubDest, cubDest, pcubMsgSize, static_cast<CSteamID* >(psteamIDRemote), nChannel);
+}
+
 extern "C" bool c_SteamUserStats_RequestCurrentStats()
 {
 	return SteamUserStats()->RequestCurrentStats();
@@ -309,11 +329,6 @@ extern "C" bool c_SteamFriends_IsUserInSource(void *steamIDUser, void *steamIDSo
 	return SteamFriends()->IsUserInSource(*static_cast<CSteamID*>(steamIDUser), *static_cast<CSteamID*>(steamIDSource));
 }
 
-extern "C" c_SteamAPICall_t c_SteamMatchmaking_RequestLobbyList()
-{
-	return SteamMatchmaking()->RequestLobbyList();
-}
-
 extern "C" void* c_SteamMatchmaking_GetLobbyByIndex(int iLobby)
 {
 	CSteamID *id = new CSteamID();
@@ -367,11 +382,6 @@ extern "C" void c_SteamMatchmaking_AddRequestLobbyListFilterSlotsAvailable(int n
 	SteamMatchmaking()->AddRequestLobbyListFilterSlotsAvailable(nSlotsAvailable);
 }
 
-extern "C" c_SteamAPICall_t c_SteamMatchmaking_JoinLobby(void *steamIDLobby)
-{
-	return SteamMatchmaking()->JoinLobby(*static_cast<CSteamID*>(steamIDLobby));
-}
-
 extern "C" bool c_SteamMatchmaking_SetLobbyData(void *steamIDLobby, const char *pchKey, const char *pchValue)
 {
 	return SteamMatchmaking()->SetLobbyData(*static_cast<CSteamID*>(steamIDLobby), pchKey, pchValue);
@@ -390,6 +400,11 @@ extern "C" int c_SteamMatchmaking_GetLobbyDataCount(void *steamIDLobby)
 extern "C" bool c_SteamMatchmaking_GetLobbyDataByIndex(void *steamIDLobby, int iLobbyData, char *pchKey, int cchKeyBufferSize, char *pchValue, int cchValueBufferSize)
 {
 	return SteamMatchmaking()->GetLobbyDataByIndex(*static_cast<CSteamID*>(steamIDLobby), iLobbyData, pchKey, cchKeyBufferSize, pchValue, cchValueBufferSize);
+}
+
+extern "C" const char* c_SteamMatchmaking_GetLobbyData(void *steamIDLobby, const char *pchKey)
+{
+	return SteamMatchmaking()->GetLobbyData( *static_cast<CSteamID*>(steamIDLobby), pchKey );
 }
 
 extern "C" bool c_SteamMatchmaking_SendLobbyChatMsg(void *steamIDLobby, const void *pvMsgBody, int cubMsgBody)
@@ -589,6 +604,7 @@ public:
 	m_CallbackGameWebCallback( this, &SteamServerClientWrapper::OnGameWebCallback),
 	m_CallbackWorkshopItemInstalled(this, &SteamServerClientWrapper::OnWorkshopItemInstalled),
 	m_CallbackP2PSessionConnectFail(this, &SteamServerClientWrapper::OnP2PSessionConnectFail),
+	m_CallbackP2PSessionRequest(this, &SteamServerClientWrapper::OnP2PSessionRequest),
 	m_IPCFailureCallback(this, &SteamServerClientWrapper::OnIPCFailure),
 	m_SteamShutdownCallback(this, &SteamServerClientWrapper::OnSteamShutdown)
 	{
@@ -602,6 +618,7 @@ public:
 		c_SteamServerClientWrapper_OnGameWebCallback = nullptr;
 		c_SteamServerClientWrapper_OnWorkshopItemInstalled = nullptr;
 		c_SteamServerClientWrapper_OnP2PSessionConnectFail = nullptr;
+		c_SteamServerClientWrapper_OnP2PSessionRequest = nullptr;
 		c_SteamServerClientWrapper_OnIPCFailure = nullptr;
 		c_SteamServerClientWrapper_OnSteamShutdown = nullptr;
 	}
@@ -633,6 +650,8 @@ public:
 
 	STEAM_CALLBACK(SteamServerClientWrapper, OnSteamShutdown, SteamShutdown_t, m_SteamShutdownCallback);
 
+	STEAM_CALLBACK(SteamServerClientWrapper, OnP2PSessionRequest, P2PSessionRequest_t, m_CallbackP2PSessionRequest);
+
 	void OnLobbyCreated(LobbyCreated_t *pCallback, bool bIOFailure);
 	CCallResult<SteamServerClientWrapper, LobbyCreated_t> m_SteamCallResultLobbyCreated;
 	void m_SteamCallResultLobbyCreated_Set(SteamAPICall_t hSteamAPICall);
@@ -640,6 +659,10 @@ public:
 	void OnLobbyEntered( LobbyEnter_t *pCallback, bool bIOFailure );
 	CCallResult<SteamServerClientWrapper, LobbyEnter_t> m_SteamCallResultLobbyEntered; //Why isn't this set in the example?
 	void m_SteamCallResultLobbyEntered_Set(SteamAPICall_t hSteamAPICall);
+	
+	void OnLobbyMatchListCallback( LobbyMatchList_t *pCallback, bool bIOFailure );
+	CCallResult<SteamServerClientWrapper, LobbyMatchList_t> m_SteamCallResultLobbyMatchList;
+	void m_SteamCallResultLobbyMatchList_Set(SteamAPICall_t hSteamAPICall);
 
 	// Called when SteamUser()->RequestEncryptedAppTicket() returns asynchronously
 	void OnRequestEncryptedAppTicket( EncryptedAppTicketResponse_t *pEncryptedAppTicketResponse, bool bIOFailure );
@@ -693,7 +716,27 @@ private:
 	CGameServerPing m_GameServerPing;
 } *steam_server_client_wrapper;
 
-extern "C" c_SteamAPICall_t c_SteamMatchmaking_CreateLobby(c_ELobbyType eLobbyType, int cMaxMembers, void *onLobbyCreatedFunc)
+void SteamServerClientWrapper::OnP2PSessionRequest(P2PSessionRequest_t *pCallback)
+{
+	if (c_SteamServerClientWrapper_OnP2PSessionRequest)
+		(*c_SteamServerClientWrapper_OnP2PSessionRequest)(pCallback);
+}
+
+extern "C" c_SteamAPICall_t c_SteamMatchmaking_JoinLobby(void *steamIDLobby)
+{
+	c_SteamAPICall_t steamAPICall = SteamMatchmaking()->JoinLobby(*(static_cast<CSteamID *>(steamIDLobby)));
+	steam_server_client_wrapper->m_SteamCallResultLobbyEntered_Set(steamAPICall);
+	return steamAPICall;
+}
+
+extern "C" c_SteamAPICall_t c_SteamMatchmaking_RequestLobbyList()
+{
+	SteamAPICall_t m_SteamCallResultLobbyMatchList = SteamMatchmaking()->RequestLobbyList();
+	steam_server_client_wrapper->m_SteamCallResultLobbyMatchList_Set(m_SteamCallResultLobbyMatchList);
+	return m_SteamCallResultLobbyMatchList;
+}
+
+extern "C" c_SteamAPICall_t c_SteamMatchmaking_CreateLobby(c_ELobbyType eLobbyType, int cMaxMembers)
 {
 	c_SteamAPICall_t steamAPICall = SteamMatchmaking()->CreateLobby(static_cast<ELobbyType>(eLobbyType), cMaxMembers);
 	steam_server_client_wrapper->m_SteamCallResultLobbyCreated_Set(steamAPICall);
@@ -793,6 +836,17 @@ void SteamServerClientWrapper::m_SteamCallResultLobbyCreated_Set(SteamAPICall_t 
 	m_SteamCallResultLobbyCreated.Set(hSteamAPICall, this, &SteamServerClientWrapper::OnLobbyCreated);
 }
 
+void SteamServerClientWrapper::OnLobbyMatchListCallback(LobbyMatchList_t *pCallback, bool bIOFailure)
+{
+	if (c_SteamServerClientWrapper_OnLobbyMatchListCallback)
+		(*c_SteamServerClientWrapper_OnLobbyMatchListCallback)(pCallback, bIOFailure);
+}
+
+void SteamServerClientWrapper::m_SteamCallResultLobbyMatchList_Set(SteamAPICall_t hSteamAPICall)
+{
+	m_SteamCallResultLobbyMatchList.Set( hSteamAPICall, this, &SteamServerClientWrapper::OnLobbyMatchListCallback );
+}
+
 void SteamServerClientWrapper::OnLobbyEntered(LobbyEnter_t *pCallback, bool bIOFailure)
 {
 	if (c_SteamServerClientWrapper_OnLobbyEntered)
@@ -848,6 +902,11 @@ extern "C" uint8_t c_GameOverlayActivated_t_m_bActive(void *GameOverlayActivated
 	return static_cast<GameOverlayActivated_t*>(GameOverlayActivated_t_instance)->m_bActive;
 }
 
+extern "C" uint32_t pCallback_m_nLobbiesMatching(void *pCallback)
+{
+	return static_cast<LobbyMatchList_t*>(pCallback)->m_nLobbiesMatching;
+}
+
 extern "C" void c_SteamMatchmaking_JoinLobbyPCH(const char *pchLobbyID, void *onLobbyEnteredFunc)
 {
 	CSteamID steamIDLobby( (uint64)atoll( pchLobbyID ) );
@@ -856,4 +915,21 @@ extern "C" void c_SteamMatchmaking_JoinLobbyPCH(const char *pchLobbyID, void *on
 		c_SteamAPICall_t steamAPICall = SteamMatchmaking()->JoinLobby(steamIDLobby);
 		steam_server_client_wrapper->m_SteamCallResultLobbyEntered_Set(steamAPICall);
 	}
+}
+
+extern "C" uint32_t c_pCallback_m_EChatRoomEnterResponse( void *pCallback )
+{
+	return static_cast<LobbyEnter_t*>(pCallback)->m_EChatRoomEnterResponse;
+}
+
+extern "C" void *c_pCallback_m_ulSteamIDLobby( void *pCallback )
+{
+	CSteamID *id = new CSteamID();
+	*id = static_cast<LobbyEnter_t*>(pCallback)->m_ulSteamIDLobby;
+	return id;
+}
+
+extern "C" uint64_t c_CSteamID_ConvertToUint64( void *steamID )
+{
+	return (static_cast<CSteamID*>(steamID))->ConvertToUint64();
 }

@@ -61,6 +61,8 @@ void c_SteamGameServer_LogOff();
  */
 void c_SteamGameServerNetworking_AcceptP2PSessionWithUser(void* steamIDRemote);
 
+void c_SteamNetworking_AcceptP2PSessionWithUser(void* steamIDRemote);
+
 typedef enum c_EP2PSend_t
 {
 	c_k_EP2PSendUnreliable = 0,
@@ -75,6 +77,7 @@ typedef enum c_EP2PSend_t
  * NOTE 2: steamIDRemote should be a pointer to a CSteamID. It gets converted back to a CSteamID in this function.
  */
 bool c_SteamGameServerNetworking_SendP2PPacket(void* steamIDRemote, const void *pubData, uint32_t cubData, c_EP2PSend eP2PSendType, int nChannel);
+bool c_SteamNetworking_SendP2PPacket(void* steamIDRemote, const void *pubData, uint32_t cubData, c_EP2PSend eP2PSendType, int nChannel);
 
 typedef enum c_EBeginAuthSessionResult_t
 {
@@ -100,12 +103,14 @@ void c_SteamGameServer_EndAuthSession(void* steamID);
  * NOTE: nChannel defaults to zero in the steam API. That is not so here because, you know, C.
  */
 bool c_SteamGameServerNetworking_IsP2PPacketAvailable(uint32_t *pcubMsgSize, int nChannel);
+bool c_SteamNetworking_IsP2PPacketAvailable(uint32_t *pcubMsgSize, int nChannel);
 
 /*
  * NOTE: psteamIDRemote should be a CSteamID pointer. It gets converted back to a CSteamID pointer in this function.
  * NOTE 2: nChannel defaults to zero in the steam API. That is not so here because, you know, C.
  */
 bool c_SteamGameServerNetworking_ReadP2PPacket(void *pubDest, uint32_t cubDest, uint32_t *pcubMsgSize, void* psteamIDRemote, int nChannel);
+bool c_SteamNetworking_ReadP2PPacket(void *pubDest, uint32_t cubDest, uint32_t *pcubMsgSize, void* psteamIDRemote, int nChannel);
 
 uint64_t c_SteamGameServer_GetSteamID_ConvertToUInt64();
 
@@ -318,7 +323,7 @@ typedef enum c_ELobbyType_t
 	c_k_ELobbyTypeInvisible = 3,
 } c_ELobbyType;
 
-c_SteamAPICall_t c_SteamMatchmaking_CreateLobby(c_ELobbyType eLobbyType, int cMaxMembers, void *onLobbyCreatedFunc);
+c_SteamAPICall_t c_SteamMatchmaking_CreateLobby(c_ELobbyType eLobbyType, int cMaxMembers);
 
 /*
  * NOTE: This is C, so pass a void pointer to the CSteamID you want to use for steamIDLobby.
@@ -344,6 +349,11 @@ int c_SteamMatchmaking_GetLobbyDataCount(void *steamIDLobby);
  * NOTE: This is C, so pass a void pointer to the CSteamID you want to use for steamIDLobby.
  */
 bool c_SteamMatchmaking_GetLobbyDataByIndex(void *steamIDLobby, int iLobbyData, char *pchKey, int cchKeyBufferSize, char *pchValue, int cchValueBufferSize);
+
+/*
+ * NOTE: This is C, so pass a void pointer to the CSteamID you want to use for steamIDLobby.
+ */
+const char *c_SteamMatchmaking_GetLobbyData(void *steamIDLobby, const char *pchKey);
 
 /*
  * NOTE: This is C, so pass a void pointer to the CSteamID you want to use for steamIDLobby.
@@ -491,10 +501,12 @@ void (*c_SteamServerClientWrapper_OnGameOverlayActivated)(void *callback);
 void (*c_SteamServerClientWrapper_OnGameWebCallback)(void *callback);
 void (*c_SteamServerClientWrapper_OnWorkshopItemInstalled)(void *pParam);
 void (*c_SteamServerClientWrapper_OnP2PSessionConnectFail)(void *pCallback);
+void (*c_SteamServerClientWrapper_OnP2PSessionRequest)(void *pCallback);
 void (*c_SteamServerClientWrapper_OnIPCFailure)(void *failure);
 void (*c_SteamServerClientWrapper_OnSteamShutdown)(void *callback);
 void (*c_SteamServerClientWrapper_OnLobbyCreated)(void *pCallback, bool bIOFailure); //Where pCallback is a pointer to type LobbyCreated_t.
 void (*c_SteamServerClientWrapper_OnLobbyEntered)(void *pCallback, bool bIOFailure); //Where pCallback is a pointer to type LobbyEnter_t.
+void (*c_SteamServerClientWrapper_OnLobbyMatchListCallback)(void *pCallback, bool bIOFailure); //Where pCallback is a pointer to type LobbyMatchList_t.
 void (*c_SteamServerClientWrapper_OnRequestEncryptedAppTicket)(void *pEncryptedAppTicketResponse, bool bIOFailure); //Where pEncryptedAppTicketResponse is of type EncryptedAppTicketResponse_t.
 
 void (*c_SteamServerClientWrapper_GameServerPingOnServerResponded)(void *steamID);
@@ -530,6 +542,8 @@ void c_SteamFriends_ActivateGameOverlayInviteDialog(void *steamIDLobby);
  * GameOverlayActivated_t_instance is a pointer to a GameOverlayActivated_t
  */
 uint8_t c_GameOverlayActivated_t_m_bActive(void *GameOverlayActivated_t_instance);
+
+uint32_t pCallback_m_nLobbiesMatching(void *pCallback);
 
 // General result codes
 typedef enum c_EResult
@@ -641,5 +655,27 @@ void* c_LobbyCreated_Lobby(void *pCallback);
 const char *c_GameJoinRequested_m_rgchConnect(void *pCallback);
 void c_RetrieveSteamIDFromGameServer( uint32_t m_unServerIP, uint16_t m_usServerPort );
 void c_SteamMatchmaking_JoinLobbyPCH( const char *pchLobbyID,  void *onLobbyEnteredFunc );
+
+enum c_EChatRoomEnterResponse
+{
+	c_k_EChatRoomEnterResponseSuccess = 1,		// Success
+	c_k_EChatRoomEnterResponseDoesntExist = 2,	// Chat doesn't exist (probably closed)
+	c_k_EChatRoomEnterResponseNotAllowed = 3,		// General Denied - You don't have the permissions needed to join the chat
+	c_k_EChatRoomEnterResponseFull = 4,			// Chat room has reached its maximum size
+	c_k_EChatRoomEnterResponseError = 5,			// Unexpected Error
+	c_k_EChatRoomEnterResponseBanned = 6,			// You are banned from this chat room and may not join
+	c_k_EChatRoomEnterResponseLimited = 7,		// Joining this chat is not allowed because you are a limited user (no value on account)
+	c_k_EChatRoomEnterResponseClanDisabled = 8,	// Attempt to join a clan chat when the clan is locked or disabled
+	c_k_EChatRoomEnterResponseCommunityBan = 9,	// Attempt to join a chat when the user has a community lock on their account
+	c_k_EChatRoomEnterResponseMemberBlockedYou = 10, // Join failed - some member in the chat has blocked you from joining
+	c_k_EChatRoomEnterResponseYouBlockedMember = 11, // Join failed - you have blocked some member already in the chat
+	// c_k_EChatRoomEnterResponseNoRankingDataLobby = 12,  // No longer used
+	// c_k_EChatRoomEnterResponseNoRankingDataUser = 13,  //  No longer used
+	// c_k_EChatRoomEnterResponseRankOutOfRange = 14, //  No longer used
+};
+
+uint32_t c_pCallback_m_EChatRoomEnterResponse( void *pCallback );
+void *c_pCallback_m_ulSteamIDLobby( void *pCallback );
+uint64_t c_CSteamID_ConvertToUint64( void *steamID );
 
 #endif
