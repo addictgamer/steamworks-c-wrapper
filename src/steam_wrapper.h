@@ -491,6 +491,7 @@ void* c_ValidateAuthTicketResponse_t_m_SteamID(void *ValidateAuthTicketResponse_
  * Function Pointers to handle steam callbacks.
  * NOTE: You'll have to implement these yourself. But first, call c_SteamServerClientWrapper_Instantiate().
  */
+void (*c_SteamServerClientWrapper_OnLobbyDataUpdate)(void *pCallback);
 void (*c_SteamServerClientWrapper_OnLobbyGameCreated)(void *pCallback);
 void (*c_SteamServerClientWrapper_OnGameJoinRequested)(void *pCallback);
 void (*c_SteamServerClientWrapper_OnAvatarImageLoaded)(void *pCallback);
@@ -527,11 +528,11 @@ uint64_t c_LobbyGameCreated_t_m_ulSteamIDGameServer(void *LobbyGameCreated_t_ins
 enum { c_k_cchMaxRichPresenceValueLength = 256 };
 
 /*
- * Takes a void pointer to the GameRichPresenceJoinRequested_t you want to extract m_rgchConnect from.
+ * Takes a void pointer to the GameLobbyJoinRequested_t you want to extract m_steamIDLobby from.
  * The char array returned is of size c_k_cchMaxRichPresenceValueLength.
  * NOTE: You are responsible for freeing the char array returned by this function.
  */
-char* c_GameRichPresenceJoinRequested_t_m_rgchConnect(void *GameRichPresenceJoinRequested_t_instance);
+void *c_GameJoinRequested_m_steamIDLobby(void *GameLobbyJoinRequested_t_instance);
 
 /*
  * steamIDLobby should be a CSteamID pointer.
@@ -652,7 +653,6 @@ typedef enum c_EResult
 
 c_EResult c_LobbyCreated_Result(void *pCallback);
 void* c_LobbyCreated_Lobby(void *pCallback);
-const char *c_GameJoinRequested_m_rgchConnect(void *pCallback);
 void c_RetrieveSteamIDFromGameServer( uint32_t m_unServerIP, uint16_t m_usServerPort );
 void c_SteamMatchmaking_JoinLobbyPCH( const char *pchLobbyID,  void *onLobbyEnteredFunc );
 
@@ -677,5 +677,6 @@ enum c_EChatRoomEnterResponse
 uint32_t c_pCallback_m_EChatRoomEnterResponse( void *pCallback );
 void *c_pCallback_m_ulSteamIDLobby( void *pCallback );
 uint64_t c_CSteamID_ConvertToUint64( void *steamID );
+void *LobbyDataUpdated_pCallback_m_ulSteamIDLobby( void *pCallback );
 
 #endif

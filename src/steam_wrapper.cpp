@@ -473,9 +473,11 @@ extern "C" void* c_LobbyCreated_Lobby(void *pCallback)
 	return id;
 }
 
-extern "C" const char *c_GameJoinRequested_m_rgchConnect(void *pCallback)
+extern "C" void *c_GameJoinRequested_m_steamIDLobby(void *pCallback)
 {
-	return static_cast<const char *>(static_cast<GameRichPresenceJoinRequested_t*>(pCallback)->m_rgchConnect);
+	CSteamID *id = new CSteamID;
+	*id = static_cast<GameLobbyJoinRequested_t*>(pCallback)->m_steamIDLobby;
+	return id;
 }
 
 class SteamServerWrapper
@@ -605,6 +607,7 @@ public:
 	m_CallbackWorkshopItemInstalled(this, &SteamServerClientWrapper::OnWorkshopItemInstalled),
 	m_CallbackP2PSessionConnectFail(this, &SteamServerClientWrapper::OnP2PSessionConnectFail),
 	m_CallbackP2PSessionRequest(this, &SteamServerClientWrapper::OnP2PSessionRequest),
+	m_CallbackLobbyDataUpdate(this, &SteamServerClientWrapper::OnLobbyDataUpdate),
 	m_IPCFailureCallback(this, &SteamServerClientWrapper::OnIPCFailure),
 	m_SteamShutdownCallback(this, &SteamServerClientWrapper::OnSteamShutdown)
 	{
@@ -621,11 +624,14 @@ public:
 		c_SteamServerClientWrapper_OnP2PSessionRequest = nullptr;
 		c_SteamServerClientWrapper_OnIPCFailure = nullptr;
 		c_SteamServerClientWrapper_OnSteamShutdown = nullptr;
+		c_SteamServerClientWrapper_OnLobbyDataUpdate = nullptr;
 	}
+
+	STEAM_CALLBACK(SteamServerClientWrapper, OnLobbyDataUpdate, LobbyDataUpdate_t, m_CallbackLobbyDataUpdate);
 
 	STEAM_CALLBACK(SteamServerClientWrapper, OnLobbyGameCreated, LobbyGameCreated_t, m_LobbyGameCreated);
 
-	STEAM_CALLBACK(SteamServerClientWrapper, OnGameJoinRequested, GameRichPresenceJoinRequested_t, m_GameJoinRequested);
+	STEAM_CALLBACK(SteamServerClientWrapper, OnGameJoinRequested, GameLobbyJoinRequested_t, m_GameJoinRequested);
 
 	//STEAM_CALLBACK( CSpaceWarClient, OnAvatarImageLoaded, AvatarImageLoaded_t, m_AvatarImageLoadedCreated );
 	STEAM_CALLBACK(SteamServerClientWrapper, OnAvatarImageLoaded, AvatarImageLoaded_t, m_AvatarImageLoadedCreated); //TODO: Finish.
@@ -716,6 +722,12 @@ private:
 	CGameServerPing m_GameServerPing;
 } *steam_server_client_wrapper;
 
+void SteamServerClientWrapper::OnLobbyDataUpdate(LobbyDataUpdate_t *pCallback)
+{
+	if (c_SteamServerClientWrapper_OnLobbyDataUpdate)
+		(*c_SteamServerClientWrapper_OnLobbyDataUpdate)(pCallback);
+}
+
 void SteamServerClientWrapper::OnP2PSessionRequest(P2PSessionRequest_t *pCallback)
 {
 	if (c_SteamServerClientWrapper_OnP2PSessionRequest)
@@ -759,7 +771,7 @@ void SteamServerClientWrapper::OnLobbyGameCreated(LobbyGameCreated_t *pCallback)
 		(*c_SteamServerClientWrapper_OnLobbyGameCreated)(pCallback);
 }
 
-void SteamServerClientWrapper::OnGameJoinRequested(GameRichPresenceJoinRequested_t *pCallback)
+void SteamServerClientWrapper::OnGameJoinRequested(GameLobbyJoinRequested_t *pCallback)
 {
 	if (c_SteamServerClientWrapper_OnGameJoinRequested)
 		(*c_SteamServerClientWrapper_OnGameJoinRequested)(pCallback);
@@ -885,13 +897,6 @@ extern "C" uint64_t c_LobbyGameCreated_t_m_ulSteamIDGameServer(void *LobbyGameCr
 	return static_cast<LobbyGameCreated_t*>(LobbyGameCreated_t_instance)->m_ulSteamIDGameServer;
 }
 
-extern "C" char* c_GameRichPresenceJoinRequested_t_m_rgchConnect(void *GameRichPresenceJoinRequested_t_instance)
-{
-	char* result = (char*)malloc(c_k_cchMaxRichPresenceValueLength * sizeof(char));
-	memcpy(result, static_cast<GameRichPresenceJoinRequested_t*>(GameRichPresenceJoinRequested_t_instance)->m_rgchConnect, c_k_cchMaxRichPresenceValueLength);
-	return result;
-}
-
 extern "C" void c_SteamFriends_ActivateGameOverlayInviteDialog(void *steamIDLobby)
 {
 	SteamFriends()->ActivateGameOverlayInviteDialog(*static_cast<CSteamID*>(steamIDLobby));
@@ -932,4 +937,11 @@ extern "C" void *c_pCallback_m_ulSteamIDLobby( void *pCallback )
 extern "C" uint64_t c_CSteamID_ConvertToUint64( void *steamID )
 {
 	return (static_cast<CSteamID*>(steamID))->ConvertToUint64();
+}
+
+extern "C" void *LobbyDataUpdated_pCallback_m_ulSteamIDLobby(void *pCallback)
+{
+	CSteamID *id = new CSteamID();
+	*id = static_cast<LobbyDataUpdate_t*>(pCallback)->m_ulSteamIDLobby;
+	return id;
 }
