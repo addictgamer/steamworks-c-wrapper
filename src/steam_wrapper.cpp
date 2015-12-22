@@ -387,6 +387,11 @@ extern "C" bool c_SteamMatchmaking_SetLobbyData(void *steamIDLobby, const char *
 	return SteamMatchmaking()->SetLobbyData(*static_cast<CSteamID*>(steamIDLobby), pchKey, pchValue);
 }
 
+extern "C" bool c_SteamMatchmaking_SetLobbyType(void *steamIDLobby, c_ELobbyType eLobbyType)
+{
+	return SteamMatchmaking()->SetLobbyType(*static_cast<CSteamID*>(steamIDLobby),static_cast<ELobbyType>(eLobbyType));
+}
+
 extern "C" bool c_SteamMatchmaking_DeleteLobbyData(void *steamIDLobby, const char *pchKey)
 {
 	return SteamMatchmaking()->DeleteLobbyData(*static_cast<CSteamID*>(steamIDLobby), pchKey);

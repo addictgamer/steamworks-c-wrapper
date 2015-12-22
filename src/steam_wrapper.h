@@ -338,6 +338,11 @@ bool c_SteamMatchmaking_SetLobbyData(void *steamIDLobby, const char *pchKey, con
 /*
  * NOTE: This is C, so pass a void pointer to the CSteamID you want to use for steamIDLobby.
  */
+bool c_SteamMatchmaking_SetLobbyType(void *steamIDLobby, c_ELobbyType eLobbyType);
+
+/*
+ * NOTE: This is C, so pass a void pointer to the CSteamID you want to use for steamIDLobby.
+ */
 bool c_SteamMatchmaking_DeleteLobbyData(void *steamIDLobby, const char *pchKey);
 
 /*
